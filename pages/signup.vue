@@ -1,5 +1,4 @@
 <template>
-
 <ToolBar />
-login
+    sign up
 </template>

@@ -6,19 +6,11 @@
 
 <div class="tool-bar">
     <div class="button-container">
-        <b>常驻功能区</b>
-        <el-button>Default</el-button>
-        <el-button type="primary">Primary</el-button>
-        <el-button type="success">Success</el-button>
-        <el-button type="info">Info</el-button>
-        <el-button type="warning">Warning</el-button>
-        <el-button type="danger">Danger</el-button>
-        <el-button>Default</el-button>
-        <el-button type="primary">Primary</el-button>
-        <el-button type="success">Success</el-button>
-        <el-button type="info">Info</el-button>
-        <el-button type="warning">Warning</el-button>
-        <el-button type="danger">Danger</el-button>
+        <!-- <b>常驻功能区</b> -->
+        <el-button plain>主页</el-button>
+        <el-button plain ></el-button>
+        <el-button plain ></el-button>
+        <el-button plain ></el-button>
     </div>
 </div>
 
@@ -28,8 +20,7 @@
     background-color: #333;
     color: #fff;
     padding: 5px;
-    text-align: center;
-}
+    text-align: center;}
 
 
 .tool-bar {
