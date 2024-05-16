@@ -6,6 +6,7 @@
         <div class="exam-procedure">
             <b>考试报名流程</b>
             <br>
+            图片示例
             <img src="https://resource.neea.edu.cn/project/CET/images/bz1.png" alt="考试流程">
             <!-- TODO：alt text write detailed content -->
         </div>
