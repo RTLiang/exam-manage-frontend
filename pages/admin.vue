@@ -1,0 +1,4 @@
+<template>
+    <ToolBar />
+    admin
+</template>

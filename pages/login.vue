@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         handleSubmit() {
-            event.preventDefault(); // prevent form submission
+            // event.preventDefault(); // prevent form submission
             console.log('Form submitted:', this.form);
             // your form submission logic here
         }

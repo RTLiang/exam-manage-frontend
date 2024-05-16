@@ -7,10 +7,10 @@
 <div class="tool-bar">
     <div class="button-container">
         <!-- <b>常驻功能区</b> -->
-        <el-button plain>主页</el-button>
+        <el-button @click="$router.push('/')" plain >主页</el-button>
         <el-button plain ></el-button>
         <el-button plain ></el-button>
-        <el-button plain ></el-button>
+        <el-button @click="$router.push('/admin')" plain >管理页面</el-button>
     </div>
 </div>
 
