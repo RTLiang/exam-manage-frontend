@@ -1,11 +1,11 @@
 <template>
-    <ToolBar />
+    <Banner />
     <br>
     <div>
         <el-container class="form-container">
             <el-header>
 
-                <h2>考生登录</h2>
+                <h2>机构</h2>
 
             </el-header>
             <br>
@@ -33,6 +33,7 @@
     </div>
 
 </template>
+
 <script>
 export default {
     data() {
