@@ -10,7 +10,7 @@
         <el-button @click="$router.push('/')" plain >主页</el-button>
         <el-button plain ></el-button>
         <el-button plain ></el-button>
-        <el-button @click="$router.push('/admin')" plain >管理页面</el-button>
+        <el-button @click="$router.push('/admin')" plain >管理员入口</el-button>
     </div>
 </div>
 
