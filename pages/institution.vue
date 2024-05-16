@@ -5,13 +5,13 @@
         <el-container class="form-container">
             <el-header>
 
-                <h2>机构</h2>
+                <h2>机构登录</h2>
 
             </el-header>
             <br>
             <el-main>
                 <el-form :model="form" @submit.prevent="handleSubmit" label-width="240px">
-                    <el-form-item label="考生身份证号/手机号/电子邮箱">
+                    <el-form-item label="机构账号">
                         <el-input v-model="form.username" required></el-input>
                     </el-form-item>
 
@@ -23,9 +23,6 @@
                         <el-button type="primary" native-type="submit">登录</el-button>
                         <el-button @click="$router.push('/')">返回首页</el-button>
                     </el-form-item>
-                    <hr>
-                    <h3>没有账户？</h3>
-                    <el-button @click="$router.push('/signup')">去注册</el-button>
                 </el-form>
             </el-main>
         </el-container>

@@ -34,7 +34,10 @@
                         <el-button type="primary" native-type="submit">提交</el-button>
                         <el-button @click="$router.push('/')">返回首页</el-button>
                     </el-form-item>
-                </el-form></el-main>
+                </el-form>
+                <p v-if="showSuccessMessage" style="color: green;">注册成功！正在进入登录页...</p>
+            </el-main>
+
         </el-container>
 
     </div>
@@ -51,8 +54,10 @@ export default {
                 email: '',
                 password: '',
                 confirmPassword: ''
-            }
-        }
+            },
+            showSuccessMessage: false,
+        };
+
     },
     methods: {
         handleSubmit() {
@@ -62,6 +67,17 @@ export default {
             // If passwords match, continue with form submission or other logic
             console.log('Form submitted:', this.form);
             // Add your form submission logic here
+
+            //TODO 连接数据库登录
+
+
+
+            this.showSuccessMessage = true; // show the success message
+
+            // Redirect to login page
+            setTimeout(() => {
+                this.$router.push('/login');
+            }, 1500);
         },
         validateForm() {
             if (this.form.password !== this.form.confirmPassword) {
