@@ -40,7 +40,6 @@
     </div>
 
 </template>
-
 <script>
 export default {
     data() {
@@ -57,12 +56,24 @@ export default {
     },
     methods: {
         handleSubmit() {
-            // Handle form submission logic
+            if (!this.validateForm()) {
+                return; // prevent form submission if passwords don't match
+            }
+            // If passwords match, continue with form submission or other logic
             console.log('Form submitted:', this.form);
+            // Add your form submission logic here
         },
+        validateForm() {
+            if (this.form.password !== this.form.confirmPassword) {
+                alert('两次输入的密码不一致，请重新输入！')
+                return false
+            }
+            return true
+        }
     }
 }
 </script>
+
 
 <style>
 .form-container {
