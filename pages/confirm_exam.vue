@@ -2,7 +2,7 @@
   <Banner />
   <br>
   <div class="exam-page">
-    核对信息后报名
+    <h1 style="text-align: center;">核对信息后报名</h1>
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="student-info">
@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts">
-import { tr } from 'element-plus/es/locales.mjs';
+
 
 export default {
   data() {
@@ -153,8 +153,9 @@ export default {
 .exam-page {
   padding: 20px;
   margin: auto 7%;
-  background-color: rgb(221, 221, 221);
+  background-color: #f9f9f9;
   border-radius: 5px;
+  border:1px solid #ccc;
   /* text-color */
 }
 

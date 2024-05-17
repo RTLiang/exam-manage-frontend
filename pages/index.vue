@@ -5,7 +5,7 @@
     <div class="carousel ">
         <el-carousel height="150px">
             <el-carousel-item v-for="item in imageData" :key="item.id">
-                <img class="carousel-image" :src="item.url" alt="Carousel Image" />
+                <img class="carousel-image" :src="item.url" alt="Carousel Image" style="max-width: 100%; max-height: 100%; height: auto; margin: 0 auto; display: block;"/>
             </el-carousel-item>
         </el-carousel>
     </div>
@@ -15,9 +15,8 @@
         <div class="exam-procedure-box">
 
             <div class="exam-procedure">
-                <b>考试报名流程</b>
+                <h2>考试报名流程</h2>
                 <br>
-                图片示例
                 <img src="https://resource.neea.edu.cn/project/CET/images/bz1.png" alt="考试流程">
                 <!-- TODO：alt text write detailed content -->
             </div>
@@ -73,6 +72,7 @@ export default {
 background-color: #ebeff0;
 }
 .exam-procedure-box {
+    background-color: white;
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
@@ -92,7 +92,6 @@ background-color: #ebeff0;
 }
 
 .exam-procedure {
-    font-size: 28pt;
     /* added font size */
     align-items: center;
     text-align: center;

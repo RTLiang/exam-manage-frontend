@@ -1,5 +1,6 @@
 <template>
     <Banner />
+    <NuxtPage />
     <br>
     <div>
         <el-container class="form-container">

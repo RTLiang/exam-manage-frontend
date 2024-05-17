@@ -2,16 +2,11 @@
     <Banner />
     <br>
     <div class="exam_info_page">
+        <h1 style="text-align: center;">考生缴费</h1>
         <el-row :gutter="20">
             <el-col :span="6">
-                <div class="exam_info">
-                    <h2>考试信息</h2>
-                    <p><b>考生姓名：</b>{{ student.name }}</p>
-                    <p><b>考试科目：</b>{{ exam.subject }}</p>
-                    <p><b>考试时间：</b>{{ exam.examTime }}</p>
-                    <p><b>考试地点：</b>{{ exam.location }}</p>
-                </div>
 
+<ExamInfo/>
             </el-col>
             <el-col :span="18">
                 <div class="exam_pay">
@@ -88,11 +83,6 @@ export default {
 }
 
 
-.exam_info {
-    background-color: #d7bdbd;
-    padding: 20px;
-    border-radius: 5px;
-}
 
 .exam_pay{
     

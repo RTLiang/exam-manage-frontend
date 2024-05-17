@@ -7,7 +7,7 @@
 
 <style scoped>
 .banner {
-    background-color: #333;
+    background-color: #414042;
     color: #fff;
     padding: 5px;
     text-align: center;
