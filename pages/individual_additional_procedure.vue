@@ -1,5 +1,5 @@
 <template>
-    <ToolBar />
+    <Banner />
     <br>
     <div class="info_page">
         <el-container>

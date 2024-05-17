@@ -1,4 +1,5 @@
 <template>
+    <Banner />
     <ToolBar />
     <br>
     <div>

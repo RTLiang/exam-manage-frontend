@@ -1,5 +1,4 @@
 <template>
-    <Banner />
     <div class="tool-bar">
         <div class="button-container">
             <!-- <b>常驻功能区</b> -->
