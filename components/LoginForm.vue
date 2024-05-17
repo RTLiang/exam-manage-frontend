@@ -1,17 +1,27 @@
 <template>
-    <ToolBar />
-    <br>
-    <!-- <div>
+    <div>
         <el-container class="form-container">
             <el-header>
-
-                <h2>考生登录</h2>
-
+                <h2 v-if="type === 'individual'">考生登录</h2>
+                <h2 v-else-if="type === 'edu'">机构登录</h2>
+                <h2 v-else-if="type === 'admin'">管理员登录</h2>
             </el-header>
             <br>
             <el-main>
                 <el-form :model="form" @submit.prevent="handleSubmit" label-width="240px">
-                    <el-form-item label="考生身份证号/手机号/电子邮箱">
+
+                    <!-- 个人登录 -->
+                    <el-form-item v-if="type === 'individual'" label="考生身份证号/手机号/电子邮箱">
+                        <el-input v-model="form.username" required></el-input>
+                    </el-form-item>
+
+                    <!-- 机构登录 -->
+                    <el-form-item v-else-if="type === 'edu'" label="机构账号">
+                        <el-input v-model="form.username" required></el-input>
+                    </el-form-item>
+
+                    <!-- 管理员登录 -->
+                    <el-form-item v-else-if="type === 'admin'" label="管理员账号">
                         <el-input v-model="form.username" required></el-input>
                     </el-form-item>
 
@@ -21,25 +31,32 @@
 
                     <el-form-item>
                         <el-button type="primary" native-type="submit">登录</el-button>
-                        <el-button>忘记密码</el-button>
+                        <el-button v-if="type === individual">忘记密码</el-button>
                         <el-button @click="$router.push('/')">返回首页</el-button>
 
                     </el-form-item>
-                    <hr>
-                    <h3>没有账户？</h3>
-                    <el-button @click="$router.push('/signup')">去注册</el-button>
+
+                    <div v-if="type === 'individual'">
+                        <hr>
+                        <h3>没有账户？</h3>
+                        <el-button @click="$router.push('/signup')">去注册</el-button>
+                    </div>
                 </el-form>
             </el-main>
         </el-container>
 
-    </div> -->
-
-    <LoginForm type = "individual"/>
-
+    </div>
 
 </template>
+
 <script>
 export default {
+    props: {
+        type: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             form: {
@@ -50,9 +67,7 @@ export default {
     },
     methods: {
         handleSubmit() {
-            // event.preventDefault(); // prevent form submission
-            console.log('Form submitted:', this.form);
-            // your form submission logic here
+            // Handle form submission
         }
     }
 }
