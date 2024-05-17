@@ -1,18 +1,22 @@
 <template>
   <div class="welcome">
-    <span class="welcome-text">{{ user.name }}考生，欢迎登录考试系统！</span>
+    <span class="welcome-text">{{ user.name }}{{ userTypeText }}，欢迎登录考试系统！</span>
     <el-button type="danger" plain class="logout-btn" @click="$router.push('/')">退出登录</el-button>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      user: {
-        name: "赖世文"
-      }
-    };
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    userTypeText() {
+      return this.user.usr_type === 'individual' ? '考生' : '机构';
+    }
   }
 }
 </script>

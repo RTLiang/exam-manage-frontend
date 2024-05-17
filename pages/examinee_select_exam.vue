@@ -1,6 +1,6 @@
 <template>
     <Banner />
-    <Welcome />
+    <Welcome :user="user" />
 
     <div class="exam-list">
         <h2>考试列表</h2>
@@ -47,8 +47,12 @@ export default {
                     registrationDeadline: '11:59PM Jul 2, 2024',
                     status: 'printed'
                 }
-            ]
-        };
+            ],
+            user: {
+                name: "赖世文",
+                usr_type: "individual",
+            }
+        }
     },
     methods: {
         getButtonText(status) {
