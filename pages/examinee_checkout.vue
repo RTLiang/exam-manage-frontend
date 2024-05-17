@@ -5,7 +5,8 @@
         <el-row :gutter="20">
             <el-col :span="6">
                 <div class="exam_info">
-                    <h3>考试信息</h3>
+                    <h2>考试信息</h2>
+                    <p><b>考生姓名：</b>{{ student.name }}</p>
                     <p><b>考试科目：</b>{{ exam.subject }}</p>
                     <p><b>考试时间：</b>{{ exam.examTime }}</p>
                     <p><b>考试地点：</b>{{ exam.location }}</p>

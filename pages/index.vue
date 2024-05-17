@@ -2,29 +2,53 @@
     <ToolBar />
     <NuxtPage />
     <br>
-    <div class="exam-procedure-box">
-        <div class="exam-procedure">
-            <b>考试报名流程</b>
-            <br>
-            图片示例
-            <img src="https://resource.neea.edu.cn/project/CET/images/bz1.png" alt="考试流程">
-            <!-- TODO：alt text write detailed content -->
-        </div>
+    <div class="carousel ">
+        <el-carousel height="150px">
+            <el-carousel-item v-for="item in imageData" :key="item.id">
+                <img class="carousel-image" :src="item.url" alt="Carousel Image" />
+            </el-carousel-item>
+        </el-carousel>
+    </div>
+    <br>
+    <div class="lowerbox">
         <br>
-        <div class="login-signup">
-            <div class="button-container">
-                <el-button class="login" @click="$router.push('/login')">登录</el-button>
-                <el-button class="button" @click="$router.push('/signup')">注册新账户</el-button>
+        <div class="exam-procedure-box">
+
+            <div class="exam-procedure">
+                <b>考试报名流程</b>
+                <br>
+                图片示例
+                <img src="https://resource.neea.edu.cn/project/CET/images/bz1.png" alt="考试流程">
+                <!-- TODO：alt text write detailed content -->
+            </div>
+            <br>
+            <div class="login-signup">
+                <div class="button-container">
+                    <el-button class="login" @click="$router.push('/login')">登录</el-button>
+                    <el-button class="button" @click="$router.push('/signup')">注册新账户</el-button>
+                </div>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
     </div>
-
 
 </template>
 
 
 <script>
 export default {
+    data() {
+        return {
+            imageData: [
+                { id: 1, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad13.jpg' },
+                { id: 2, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad12.jpg' },
+                { id: 3, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad14.jpg' },
+                { id: 4, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad4.png' },
+            ],
+        }
+    },
     components: {
         ToolBar: () => import('~/components/ToolBar.vue')
     },
@@ -42,6 +66,12 @@ export default {
 
 
 <style>
+.carousel {
+    margin: 0 15%;
+}
+.lowerbox{
+background-color: #ebeff0;
+}
 .exam-procedure-box {
     border: 1px solid #ddd;
     padding: 10px;

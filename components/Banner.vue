@@ -1,6 +1,6 @@
 <template>
     <div class="banner">
-        <h1>省考系统</h1>
+        <h2>省考系统</h2>
         <p>省着点考</p>
     </div>
 </template>
@@ -10,7 +10,7 @@
     background-color: #333;
     color: #fff;
     padding: 5px;
-    text-align: center;}
-
-
+    text-align: center;
+    height: 100px;
+}
 </style>
