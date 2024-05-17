@@ -22,7 +22,7 @@
               <el-button type="primary" class="button-confirm" @click="confirmInfo">确认信息无误</el-button>
               <br>
               <br>
-              <el-button type="danger"  class="button-confirm" @click="$router.push('/login')">信息有误，重新登录</el-button>
+              <el-button type="danger" class="button-confirm" @click="$router.push('/login')">信息有误，重新登录</el-button>
             </div>
             <div v-else>
               <p style="color:green">已确认信息</p>
@@ -72,18 +72,31 @@
             </el-row>
             <p>此考点剩余考位：{{ location.seats }}</p>
             <el-form-item>
-  <el-button type="primary" @click="handleAction" :disabled="!confirmed" >确认报考</el-button>
-</el-form-item>
+              <el-button type="primary" @click="showExamRules" :disabled="!confirmed">确认报考</el-button>
+            </el-form-item>
 
           </el-form>
         </div>
 
       </el-col>
     </el-row>
+    <!-- 考试须知 -->
+    <el-dialog v-model="examRules" title="考试须知" width="500">
+      <span>这是一条又臭又长的考试须知，现在的内容肯定要改，不过就先这样吧，点击“我已阅读并了解”。</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="examRules = false">
+            我已阅读并了解
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { tr } from 'element-plus/es/locales.mjs';
+
 export default {
   data() {
     return {
@@ -120,6 +133,7 @@ export default {
         // ...
       ],
       confirmed: false,
+      examRules: false,
     };
   },
   methods: {
@@ -127,15 +141,13 @@ export default {
     confirmInfo() {
       this.confirmed = true;
     },
-    retryLogin() {
-      this.$message({
-        message: '请重新登录',
-        type: 'warning'
-      });
-    }
+    showExamRules() {
+      this.examRules = true;
+    },
   }
 };
 </script>
+
 
 <style scoped>
 .exam-page {
@@ -145,7 +157,8 @@ export default {
   border-radius: 5px;
   /* text-color */
 }
-.button-confirm{
+
+.button-confirm {
 
   width: 100%;
   text-align: center;
