@@ -21,7 +21,9 @@
 
                     <el-form-item>
                         <el-button type="primary" native-type="submit">登录</el-button>
+                        <el-button>忘记密码</el-button>
                         <el-button @click="$router.push('/')">返回首页</el-button>
+
                     </el-form-item>
                     <hr>
                     <h3>没有账户？</h3>
