@@ -11,7 +11,7 @@
                     <el-table :data="studentsData" border height=400 style="width: 100%">
                         <el-table-column prop="name" label="姓名" width="80" />
                         <el-table-column prop="phoneNumber" label="电话号码" width="120" />
-                        <el-table-column prop="idNumber" label="身份证号码" width="150" />
+                        <el-table-column prop="idNumber" label="身份证号码" />
                     </el-table>
                     <br>
                     <div v-if="!confirmed">
@@ -185,7 +185,7 @@ export default {
 <style scoped>
 .exam-page {
     padding: 20px;
-    margin: auto 5%;
+    margin: auto 3%;
     background-color: #f9f9f9;
     border-radius: 5px;
     border: 1px solid #ccc;
