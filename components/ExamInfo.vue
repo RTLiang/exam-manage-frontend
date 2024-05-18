@@ -2,7 +2,8 @@
 
     <div class="exam_info">
         <h2>考试信息</h2>
-        <p><b>考生姓名：</b>{{ student.name }}</p>
+        <p v-if="type === 'individual'"><b>考生姓名：</b>{{ student.name }}</p>
+        <p v-if="type === 'edu'"><b>考试人数</b>：{{ studentNumbers }}</p>
         <p><b>考试科目：</b>{{ exam.subject }}</p>
         <p><b>考试时间：</b>{{ exam.examTime }}</p>
         <p><b>考试地点：</b>{{ exam.location }}</p>
@@ -16,6 +17,17 @@
 
 
 export default {
+    props: {
+        type: {
+            type: String,
+            required: true
+        },
+        studentNumbers: {
+            type: Number,
+            default: 1,
+        }
+    },
+
     data() {
         return {
             student: {

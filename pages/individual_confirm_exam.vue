@@ -2,21 +2,22 @@
   <Banner />
   <br>
   <div class="exam-page">
-    <h1 style="text-align: center;">核对信息后报名</h1>
+    <h1 style="text-align: center;">核对信息后确认报考</h1>
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="student-info">
           <h3>请核对考生信息</h3>
-          <el-form :model="student" label-width="80px">
+          <el-form :model="student" label-width="90px">
             <el-form-item label="姓名">
               <el-input v-model="student.name" readonly></el-input>
             </el-form-item>
-            <el-form-item label="身份证号">
-              <el-input v-model="student.id" readonly></el-input>
-            </el-form-item>
-            <el-form-item label="手机号">
+            <el-form-item label="电话号码">
               <el-input v-model="student.phone" readonly></el-input>
             </el-form-item>
+            <el-form-item label="身份证号码">
+              <el-input v-model="student.id" readonly></el-input>
+            </el-form-item>
+
 
             <div v-if="!confirmed">
               <el-button type="primary" class="button-confirm" @click="confirmInfo">确认信息无误</el-button>
@@ -155,7 +156,7 @@ export default {
   margin: auto 7%;
   background-color: #f9f9f9;
   border-radius: 5px;
-  border:1px solid #ccc;
+  border: 1px solid #ccc;
   /* text-color */
 }
 

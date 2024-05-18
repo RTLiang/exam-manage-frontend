@@ -4,7 +4,6 @@
     <br>
     <LoginForm type="individual" />
 
-
 </template>
 <script>
 </script>
