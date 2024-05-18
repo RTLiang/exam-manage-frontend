@@ -1,9 +1,7 @@
 <template>
     <Banner />
-    <ToolBar />
-    <br>
     <div>
-        <Welcome :username="username" :usertype="usertype" />
+        <Welcome  :user="user"/>
     </div>
 </template>
 
@@ -11,8 +9,10 @@
 export default {
   data() {
     return {
-      username: '张金亮',
-      usertype: 'admin'
+      user: {
+        name: "张金亮",
+        usr_type: "admin"
+      },
     }
   }
 }
