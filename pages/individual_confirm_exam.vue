@@ -38,7 +38,7 @@
           <p>考试科目：{{ exam.subject }}</p>
           <p>考试时间：{{ exam.examTime }}</p>
           <p>截止报名时间：{{ exam.deadline }}</p>
-          <p>考试费用：{{ exam.fee }} 人民币</p>
+          <p>考试费用：<b>{{ exam.fee }}</b> 人民币</p>
         </div>
         <div class="exam-location">
           <h3>选择考点</h3>

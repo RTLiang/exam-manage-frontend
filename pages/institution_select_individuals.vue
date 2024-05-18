@@ -14,7 +14,7 @@
                     <el-table-column prop="name" label="姓名" />
                     <el-table-column prop="phoneNumber" label="手机号码" />
                     <el-table-column prop="idNumber" label="身份证号码" />
-                    <el-table-column prop="isApply" label="是否报考本科目" sortable
+                    <el-table-column prop="isApply" label="是否已报考本科目" sortable
                         :filters="[{ text: '是', value: true }, { text: '否', value: false }]"
                         :filter-method="filterIsApply" />
                 </el-table>
