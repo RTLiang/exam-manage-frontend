@@ -2,10 +2,15 @@
     <Banner />
     <ToolBar />
     <br>
-    <LoginForm type="individual" />
-
+    <LoginForm :type="type" />
 </template>
-<script>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const type = ref('individual')
+
+
 </script>
 
 

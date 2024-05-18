@@ -4,8 +4,8 @@
             <!-- <b>常驻功能区</b> -->
             <el-button @click="$router.push('/')" plain>主页</el-button>
             <el-button plain></el-button>
-            <el-button @click="$router.push('/institution_login')" plain> 机构入口 </el-button>
-            <el-button @click="$router.push('/admin')" plain>管理员入口</el-button>
+            <el-button @click="$router.push('/institution/login')" plain> 机构入口 </el-button>
+            <el-button @click="$router.push('/admin/login')" plain>管理员入口</el-button>
         </div>
     </div>
 
