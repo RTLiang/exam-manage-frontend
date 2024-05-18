@@ -24,24 +24,28 @@ export default {
         return {
             subjects: [
                 {
+                    id: '1111',
                     name: '科目1',
                     examTime: '10AM-12PM Jul 3, 2024',
                     registrationDeadline: '11:59PM Jul 2, 2024',
                     status: 'not_selected' // 用户状态: not_selected, selected, paid, printed, completed
                 },
                 {
+                    id: '2222',
                     name: '科目2',
                     examTime: '10AM-12PM Jul 3, 2024',
                     registrationDeadline: '11:59PM Jul 2, 2024',
                     status: 'selected'
                 },
                 {
+                    id: '3333',
                     name: '科目3',
                     examTime: '10AM-12PM Jul 3, 2024',
                     registrationDeadline: '11:59PM Jul 2, 2024',
                     status: 'paid'
                 },
                 {
+                    id: '4444',
                     name: '科目4',
                     examTime: '10AM-12PM Jul 3, 2024',
                     registrationDeadline: '11:59PM Jul 2, 2024',

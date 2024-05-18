@@ -15,7 +15,15 @@ export default {
   },
   computed: {
     userTypeText() {
-      return this.user.usr_type === 'individual' ? '考生' : '机构';
+      if (this.user.usr_type === 'individual') {
+        return ('考生');
+      }
+      else if (this.user.usr_type === 'edu') {
+        return ('机构');
+      }
+      else if (this.user.usr_type === 'admin') {
+        return ('管理员');
+      }
     }
   }
 }
