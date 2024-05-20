@@ -1,8 +1,8 @@
 <template>
   <Banner />
-  <div>
-    <Welcome :user="user" />
-  </div>
+  <Admin />
+  <Welcome :user="user" />
+
 
   <div class="function-list">
     <h2>管理列表</h2>

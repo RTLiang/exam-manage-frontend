@@ -1,5 +1,6 @@
 <template>
     <Banner />
+    <Admin/>
     <div class="exam-submit-box">
         <br>    
         <h2>添加考试</h2>

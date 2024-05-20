@@ -1,5 +1,6 @@
 <template>
   <Banner />
+  <Admin />
   <br>
   <div class="exam-list-box">
     <br>

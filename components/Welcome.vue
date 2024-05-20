@@ -31,7 +31,7 @@ export default {
 
 <style scoped>
 .welcome {
-  background-color: #e3e2e2;
+  background-color: #f0f0f0;
   /* grey background */
   padding: 20px;
   display: flex;
