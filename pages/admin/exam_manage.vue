@@ -1,178 +1,130 @@
 <template>
   <Banner />
-  <div class="main_panel">
-    <el-table border :data="examData" style="width: 100%">
-      <el-table-column prop="subject" label="考试科目"></el-table-column>
-      <el-table-column prop="startRegistration" label="开始报名时间">
-        <template #default="{ row }">
-          {{ formatDateTime(row.startRegistrationDate, row.startRegistrationTime) }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="endRegistration" label="截止报名时间">
-        <template #default="{ row }">
-          {{ formatDateTime(row.endRegistrationDate, row.endRegistrationTime) }}
-          <el-button v-if="isExtendable(row)" size="mini" type="primary" plain @click="openDialog(row)">延长</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column prop="startExam" label="考试开始时间">
-        <template #default="{ row }">
-          {{ formatDateTime(row.startExamDate, row.startExamTime) }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="endExam" label="考试结束时间">
-        <template #default="{ row }">
-          {{ formatDateTime(row.endExamDate, row.endExamTime) }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="examType" label="考试类型"></el-table-column>
-      <el-table-column label="考点信息">
-        <template #default="{ row }">
-          <ul>
-            <li v-for="point in row.examPoints" :key="point.id">
-              {{ point.location }} (容量: {{ point.capacity }})
-            </li>
-          </ul>
-          <strong>总容量: {{ calculateTotalCapacity(row.examPoints) }}</strong>
-        </template>
-      </el-table-column>
-      <el-table-column prop="fee" label="考试费用"></el-table-column>
-    </el-table>
+  <br>
+  <div class="exam-list-box">
+    <br>
+    <h2 style="text-align: center;">考试列表</h2>
+    <div class="exam-list">
+      <el-input v-model="searchQuery" placeholder="搜索" />
+      <el-table :data="filteredExams" border style="width: 100%">
+        <el-table-column fixed prop="exam_name" label="考试科目" />
+        <el-table-column prop="start_register" label="开始报名时间" />
+        <el-table-column prop="end_register" label="结束报名时间" />
+        <el-table-column prop="start_exam" label="考试开始时间" />
+        <el-table-column prop="end_exam" label="考试结束时间" />
+        <el-table-column prop="exam_type" label="考试类型" />
+        <el-table-column prop="fee" label="考试费用" />
+        <el-table-column label="考试人数">
+          <template #default="scope">
+            {{ scope.row.exam_centers.reduce((acc, center) => acc + center.number, 0) }}
+          </template>
+        </el-table-column>
 
-    <el-dialog title="延长报名截止日期和时间" :model-value="dialogVisible" width="30%" @close="closeDialog">
-      <el-date-picker v-model="newEndDate" type="date" placeholder="选择新的截止日期"
-        :picker-options="pickerOptions"></el-date-picker>
-      <el-time-picker v-model="newEndTime" type="time" placeholder="选择新的截止时间"></el-time-picker>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmExtend">确定</el-button>
-      </span>
-    </el-dialog>
+        <el-table-column label="考点信息" width="fit-content">
+          <template #default="scope">
+            <div v-for="(center, index) in scope.row.exam_centers" :key="index">
+              {{ center.center }} ({{ center.number }})
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作">
+          <template #default>
+            <el-button link type="primary" size="small">延长报考时间</el-button>
+            <el-button link type="primary" size="small" @click="handleClick">查看违规信息</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <br>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { ElMessage } from 'element-plus';
 
-const examData = ref([
-  {
-    subject: '数学',
-    startRegistrationDate: '2024-05-01',
-    startRegistrationTime: '00:00',
-    endRegistrationDate: '2024-06-01',
-    endRegistrationTime: '23:59',
-    startExamDate: '2024-06-15',
-    startExamTime: '19:00',
-    endExamDate: '2024-06-16',
-    endExamTime: '21:00',
-    examType: '笔试',
-    examPoints: [
-      { id: 1, location: '考点A', capacity: 50 },
-      { id: 2, location: '考点B', capacity: 30 }
-    ],
-    fee: 200
+
+<script lang="ts">
+export default {
+  data() {
+    return {
+      searchQuery: '',
+      exam_info: [
+        {
+          exam_name: "Mathematics",
+          start_register: "2022-01-01 09:00:00",
+          end_register: "2022-01-10 18:00:00",
+          start_exam: "2022-01-15 09:00:00",
+          end_exam: "2022-01-15 11:00:00",
+          exam_type: "Written",
+          exam_centers: [
+            { center: "Room 101", number: 20 },
+            { center: "Room 102", number: 30 },
+          ],
+          fee: 50.0,
+        },
+        {
+          exam_name: "Science",
+          start_register: "2022-02-01 09:00:00",
+          end_register: "2022-02-10 18:00:00",
+          start_exam: "2022-02-15 09:00:00",
+          end_exam: "2022-02-15 11:00:00",
+          exam_type: "Practical",
+          exam_centers: [
+            { center: "Room 202", number: 20 },
+            { center: "Room 203", number: 10 },
+          ],
+          fee: 30.0,
+        },
+        {
+          exam_name: "English",
+          start_register: "2022-03-01 09:00:00",
+          end_register: "2022-03-10 18:00:00",
+          start_exam: "2022-03-15 09:00:00",
+          end_exam: "2022-03-15 11:00:00",
+          exam_type: "Oral",
+          exam_centers: [
+            { center: "Room 303", number: 15 },
+            { center: "Room 304", number: 10 },
+          ],
+          fee: 20.0,
+        },
+        // Add more data as needed...
+      ]
+    };
   },
-]);
-
-const dialogVisible = ref(false);
-const selectedExam = ref(null);
-const newEndDate = ref(null);
-const newEndTime = ref(null);
-
-
-const pickerOptions = {
-  disabledDate(time) {
-    const startExamDate = selectedExam.value ? new Date(selectedExam.value.startExamDate + ' ' + selectedExam.value.startExamTime) : null;
-    const endRegistrationDate = selectedExam.value ? moment(selectedExam.value.endRegistrationDate + ' ' + selectedExam.value.endRegistrationTime).toDate() : null;
-    const endTime = selectedExam.value ? new Date(selectedExam.value.endRegistrationDate + ' ' + selectedExam.value.endRegistrationTime) : null;
-    return (startExamDate && time.getTime() < startExamDate.getTime()) || (endRegistrationDate && time.getTime() > endRegistrationDate.getTime()) || (endTime && time.getTime() <= endTime.getTime());
-  }
-};
-
-const openDialog = (exam) => {
-  selectedExam.value = exam;
-  newEndDate.value = null;
-  newEndTime.value = null;
-  dialogVisible.value = true;
-};
-
-const closeDialog = () => {
-  dialogVisible.value = false;
-};
-
-const confirmExtend = () => {
-  if (newEndDate.value && newEndTime.value && selectedExam.value) {
-    const newDate = new Date(newEndDate.value);
-    const newTime = newEndTime.value;
-    const endRegistrationDate = new Date(selectedExam.value.endRegistrationDate);
-    const endRegistrationTime = selectedExam.value.endRegistrationTime;
-    const startExamDate = new Date(selectedExam.value.startExamDate);
-    const startExamTime = selectedExam.value.startExamTime;
-
-    if (newDate > endRegistrationDate && newDate < startExamDate) {
-      selectedExam.value.endRegistrationDate = newEndDate.value;
-      selectedExam.value.endRegistrationTime = newEndTime.value;
-      ElMessage.success('报名截止日期和时间已延长');
-      dialogVisible.value = false;
+  computed: {
+    filteredExams() {
+      return this.exam_info.filter(exam => {
+        const searchQuery = this.searchQuery.toLowerCase();
+        return (
+          exam.exam_name.toLowerCase().includes(searchQuery) ||
+          exam.start_register.toLowerCase().includes(searchQuery) ||
+          exam.end_register.toLowerCase().includes(searchQuery) ||
+          exam.start_exam.toLowerCase().includes(searchQuery) ||
+          exam.end_exam.toLowerCase().includes(searchQuery) ||
+          exam.exam_type.toLowerCase().includes(searchQuery) ||
+          exam.fee.toString().includes(searchQuery)
+        );
+      });
     }
-    else if (newDate == endRegistrationDate) {
-      if (newTime > endRegistrationTime) {
-        selectedExam.value.endRegistrationDate = newEndDate.value;
-        selectedExam.value.endRegistrationTime = newEndTime.value;
-        ElMessage.success('报名截止日期和时间已延长');
-        dialogVisible.value = false;
-      } else {
-        ElMessage.error('请选择有效的截止时间');
-      }
+  },
+  methods: {
+    handleClick() {
+      console.log('click');
     }
-    else if (newDate == startExamTime) {
-      if (newTime < startExamTime) {
-        selectedExam.value.endRegistrationDate = newEndDate.value;
-        selectedExam.value.endRegistrationTime = newEndTime.value;
-        ElMessage.success('报名截止日期和时间已延长');
-        dialogVisible.value = false;
-      } else {
-        ElMessage.error('请选择有效的截止时间');
-      }
-    }
-    else {
-      ElMessage.error('请选择有效的截止日期');
-    }
-  } else {
-    ElMessage.error('请选择新的截止日期和时间');
   }
 }
-
-
-
-const isExtendable = (exam) => {
-  const currentDate = new Date();
-  const startExamDate = new Date(exam.startExamDate + ' ' + exam.startExamTime);
-  return currentDate < startExamDate;
-};
-
-const calculateTotalCapacity = (examPoints) => {
-  return examPoints.reduce((total, point) => total + point.capacity, 0);
-};
-
-const formatDateTime = (date, time) => {
-  const dateTime = new Date(`${date} ${time}`);
-  return dateTime.toLocaleString();
-};
 </script>
 
-<style scoped>
-.main_panel {
-  width: 80%;
-  margin: 10px auto;
+<style>
+.exam-list {
+  width: 95%;
+  margin: 0 auto;
+
 }
 
-.el-button {
-  margin-left: 10px;
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: flex-end;
+.exam-list-box {
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  width: 90%;
+  margin: 0 auto;
 }
 </style>
