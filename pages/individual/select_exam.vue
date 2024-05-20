@@ -4,6 +4,7 @@
 
     <div class="exam-list">
         <h2>考试列表</h2>
+        <div class="exam-cards"> 
         <el-row :gutter="20">
             <el-col :span="6" v-for="(subject, index) in subjects" :key="index">
                 <el-card>
@@ -14,7 +15,7 @@
                         }}</el-button>
                 </el-card>
             </el-col>
-        </el-row>
+        </el-row></div>
     </div>
 </template>
 
@@ -138,8 +139,13 @@ export default {
     text-align: center;
     margin-bottom: 20px;
 }
+.exam-cards{
+    background-color: #f3f3f3;
+    border-radius: 5px;
+}
 
 .el-card {
+    margin: 20px 20px;
     text-align: center;
 }
 
