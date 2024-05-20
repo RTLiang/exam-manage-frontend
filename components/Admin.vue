@@ -4,7 +4,7 @@
         <div class="button-container">
             <!-- <b>常驻功能区</b> -->
             <el-button @click="$router.push('/admin/main')" plain>管理员主页</el-button>
-            <el-button @click="$router.push('/admin/exam_manage')" plain> 管理考试 </el-button>
+            <el-button @click="$router.push('/admin/exam_manage')" plain> 考试管理 </el-button>
             <el-button @click="$router.push('/admin/exam_submit')" plain> 新建考试 </el-button>
             <el-button @click="$router.push('/admin/exam_center_manage')" plain>管理考点</el-button>
             <el-button @click="$router.push('/admin/individual_account')" plain>个人账号管理</el-button>

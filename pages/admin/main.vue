@@ -3,12 +3,11 @@
   <Admin />
   <Welcome :user="user" />
 
-
   <div class="function-list">
     <h2>管理列表</h2>
     <div class="function-cards">
-      <el-row :gutter="20">
-        <el-col :span="6" v-for="(entry, index) in entries" :key="index">
+      <el-row :gutter="20" justify="center">
+        <el-col :span="4" v-for="(entry, index) in entries" :key="index">
           <el-card class="function-card">
             <h3>{{ entry.entryname }}</h3>
             <el-button type="primary" @click="$router.push(entry.path)">进入</el-button>
@@ -33,17 +32,21 @@ export default {
           path: '/admin/exam_manage'
         },
         {
+          entryname: '新建考试',
+          path: '/admin/exam_submit'
+        },
+        {
           entryname: '考点管理',
-          path: '/',
+          path: '/admin/exam_center_manage',
         },
         {
-          entryname: '账号管理',
-          path: '/',
+          entryname: '个人账号管理',
+          path: '/admin/individual_account',
         },
         {
-          entryname: '报表统计',
-          path: '/',
-        }
+          entryname: '机构账号管理',
+          path: '/admin/institution_account',
+        },
       ],
     }
   }
@@ -64,7 +67,7 @@ export default {
   background-color: #f3f3f3;
   border-radius: 5px;
   padding: 20px;
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
 }
 

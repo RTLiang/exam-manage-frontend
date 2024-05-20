@@ -19,7 +19,7 @@
                         <br>
                         <br>
                         <el-button type="danger" class="button-confirm"
-                            @click="$router.push('/institution_select_individuals')">信息有误，重新选择考生</el-button>
+                            @click="$router.push('/institution/select_individuals')">信息有误，重新选择考生</el-button>
                     </div>
                     <div v-else>
                         <p style="color:green">已确认信息</p>

@@ -6,8 +6,11 @@
             <div style="margin-top: 20;">报名截止时间：{{ subject.registrationDeadline }}</div>
         </el-header>
         <el-main>
+            <div class="search-bar">
+                <el-input v-model="searchQuery" placeholder="搜索考生姓名或号码" />
+            </div>
             <div class="table-container">
-                <el-table ref="table" :data="studentsData" stripe border @selection-change="handleSelectionChange"
+                <el-table ref="table" :data="filteredStudentsData" stripe border @selection-change="handleSelectionChange"
                     @filter-change="handleFilterChange">
                     <el-table-column type="selection" :selectable="selectableRow" />
                     <el-table-column prop="studentId" label="考生号" />
@@ -17,15 +20,12 @@
                     <el-table-column prop="isApply" label="是否已报考本科目" sortable :formatter="ShiFouType"
                         :filter-method="filterIsApply" />
                 </el-table>
-
             </div>
         </el-main>
         <el-footer>
-
             <el-button type="primary" plain :disabled="!hasSelected">
                 确认报考以上考生
             </el-button>
-
         </el-footer>
     </el-container>
 </template>
@@ -51,6 +51,7 @@ export default {
                 },
                 // ...
             ],
+            searchQuery: '',
             selectedRows: [],
             subject: {
                 id: "111",
@@ -62,6 +63,18 @@ export default {
                 usr_type: "edu"
             },
         }
+    },
+    computed: {
+        filteredStudentsData() {
+            return this.studentsData.filter(data => {
+                return Object.keys(data).some(key => {
+                    return String(data[key]).toLowerCase().includes(this.searchQuery.toLowerCase())
+                })
+            })
+        },
+        hasSelected() {
+            return this.selectedRows.length > 0;
+        },
     },
     methods: {
         selectableRow(row) {
@@ -75,18 +88,13 @@ export default {
         },
         filterIsApply(value, row) {
             return row.isApply === value;
-        }, ShiFouType(row, column, cellValue) {
+        },
+        ShiFouType(row, column, cellValue) {
             if (cellValue) {
                 return ("是");
-            }
-            else {
+            } else {
                 return ("否");
             }
-        }
-    },
-    computed: {
-        hasSelected() {
-            return this.selectedRows.length > 0;
         },
     }
 }
@@ -95,7 +103,6 @@ export default {
 <style>
 .el-header {
     text-align: center;
-
     background-color: #f9f9f9;
     display: block;
     justify-content: center;
@@ -104,6 +111,9 @@ export default {
     /* adjust the height to your liking */
 }
 
+.search-bar {
+    margin-bottom: 20px;
+}
 
 .table-container {
     display: flex;
@@ -117,7 +127,6 @@ export default {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: 0 15%;
-
 }
 
 .el-footer {

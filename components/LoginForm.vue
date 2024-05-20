@@ -31,7 +31,6 @@
 
                     <el-form-item>
                         <el-button type="primary" native-type="submit">登录</el-button>
-                        <el-button v-if="type === 'individual'">忘记密码</el-button>
                         <el-button @click="$router.push('/')">返回首页</el-button>
 
                     </el-form-item>
