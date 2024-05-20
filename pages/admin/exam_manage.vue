@@ -93,8 +93,8 @@ export default {
   },
   computed: {
     filteredExams() {
+      const searchQuery = this.searchQuery.toLowerCase();
       return this.exam_info.filter(exam => {
-        const searchQuery = this.searchQuery.toLowerCase();
         return (
           exam.exam_name.toLowerCase().includes(searchQuery) ||
           exam.start_register.toLowerCase().includes(searchQuery) ||
@@ -106,6 +106,7 @@ export default {
         );
       });
     }
+
   },
   methods: {
     handleClick() {

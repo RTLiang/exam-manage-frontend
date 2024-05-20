@@ -7,6 +7,9 @@
             <el-button @click="$router.push('/admin/exam_manage')" plain> 管理考试 </el-button>
             <el-button @click="$router.push('/admin/exam_submit')" plain> 新建考试 </el-button>
             <el-button @click="$router.push('/admin/exam_center_manage')" plain>管理考点</el-button>
+            <el-button @click="$router.push('/admin/individual_account')" plain>个人账号管理</el-button>
+            <el-button @click="$router.push('/admin/institution_account')" plain>机构账号管理</el-button>
+            
         </div>
     </div>
 
