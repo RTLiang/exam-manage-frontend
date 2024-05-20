@@ -29,8 +29,8 @@
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作">
-          <template #default>
-            <el-button link type="primary" size="small">延长报考时间</el-button>
+          <template #default="scope">
+            <el-button link type="primary" size="small" @click="extendRegistration(scope.row)">延长报考时间</el-button>
             <el-button link type="primary" size="small" @click="handleClick">查看违规信息</el-button>
           </template>
         </el-table-column>
@@ -38,6 +38,14 @@
     </div>
     <br>
   </div>
+  <el-dialog v-model="extendRegistrationDialogVisible" title="延长报考时间">
+    <el-date-picker v-model="newEndRegisterTime" type="datetime" format="YYYY-MM-DD HH:mm:ss"
+      value-format="YYYY-MM-DD HH:mm:ss" placeholder="选择日期时间" />
+    <template #footer>
+      <el-button @click="extendRegistrationDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="confirmExtendRegistration">确认</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 
@@ -88,7 +96,10 @@ export default {
           fee: 20.0,
         },
         // Add more data as needed...
-      ]
+      ],
+      extendRegistrationDialogVisible: false,
+      newEndRegisterTime: '',
+      examToExtend: null, // <--- Add this
     };
   },
   computed: {
@@ -111,8 +122,31 @@ export default {
   methods: {
     handleClick() {
       console.log('click');
-    }
-  }
+    },
+    extendRegistration(exam) {
+      this.extendRegistrationDialogVisible = true;
+      this.examToExtend = exam;
+    },
+    confirmExtendRegistration() {
+      const currentTime = new Date();
+      const newEndTime = new Date(this.newEndRegisterTime);
+      const startExamTime = new Date(this.examToExtend.start_exam);
+
+      if (newEndTime < currentTime) {
+        ElMessage.error("延长报考时间不能早于当前时间");
+        return;
+      }
+
+      if (newEndTime >= startExamTime) {
+        ElMessage.error("延长报考时间不能晚于考试开始时间");
+        return;
+      }
+
+      this.examToExtend.end_register = this.newEndRegisterTime;
+      this.extendRegistrationDialogVisible = false;
+      this.newEndRegisterTime = '';
+    },
+  },
 }
 </script>
 

@@ -90,8 +90,4 @@ export default {
     flex-direction: column;
     align-items: center;
 }
-
-.el-container .el-input {
-    width: 400px;
-}
 </style>

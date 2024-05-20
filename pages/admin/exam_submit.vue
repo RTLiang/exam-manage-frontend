@@ -1,8 +1,8 @@
 <template>
     <Banner />
-    <Admin/>
+    <Admin />
     <div class="exam-submit-box">
-        <br>    
+        <br>
         <h2>添加考试</h2>
         <div class="exam-submit">
             <el-form ref="examForm" :model="exam" label-width="120px" style="max-width: 70%;">
@@ -84,6 +84,20 @@ export default {
     },
     methods: {
         onConfirm() {
+            if (this.exam.signUpStartTime > this.exam.signUpEndTime) {
+                ElMessage.error("报名开始时间不能晚于报名截止时间");
+                return;
+            }
+
+            if (this.exam.examStartTime > this.exam.examEndTime) {
+                ElMessage.error("考试开始时间不能晚于考试结束时间");
+                return;
+            }
+
+            if (this.exam.signUpEndTime > this.exam.examStartTime) {
+                ElMessage.error("报名截止时间不能晚于考试开始时间");
+                return;
+            }
             // handle confirm logic here
         }
     }
