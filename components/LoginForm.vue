@@ -71,13 +71,13 @@ export default {
         async handleSubmit() {
             try {
                 const data = {
-                    username: this.form.username,
+                    identifier: this.form.username,
                     password: this.form.password,
-                    usertype: this.type
+                    usertype: this.type.trim().toLowerCase()
                 };
 
                 const response = await api.post('/login', data);
-console.log(response);
+                console.log(response);
                 if (response.data.success) {
                     console.log('Login successful!');
                     // Redirect to dashboard or whatever
