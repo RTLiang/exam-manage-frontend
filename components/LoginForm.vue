@@ -79,7 +79,7 @@ export default {
                 const response = await api.post('/login', data);
                 console.log(response);
                 if (response.data.success) {
-                    console.log('Login successful!');
+                    console.log('Login successful!    '+ response.data.userId);
                     // Redirect to dashboard or whatever
                 } else {
                     console.error('Login failed:', response.data.error);
