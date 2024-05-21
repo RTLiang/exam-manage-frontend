@@ -20,11 +20,11 @@
                     <h3 style="text-align: center;">请选择支付方式</h3>
                     <el-divider />
                     <el-image src="https://t.alipayobjects.com/images/T11rdgXbFkXXXXXXXX.png"
-                        class="payment_methods_image" @click="$router.push('/')" alt="支付宝" />
+                        class="payment_methods_image" @click="handlePaymentMethodClick('支付宝')" alt="支付宝" />
                     <el-image src="https://wx.gtimg.com/pay_en/img/common/logo.svg" class="payment_methods_image"
-                        @click="$router.push('/')" alt="微信支付" />
+                        @click="handlePaymentMethodClick('微信支付')" alt="微信支付" />
                     <el-image src="https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png"
-                        class="payment_methods_image" @click="$router.push('/')" alt="VISA" />
+                        class="payment_methods_image" @click="handlePaymentMethodClick('VISA')" alt="VISA" />
                 </div>
 
             </el-col>
@@ -34,7 +34,8 @@
 </template>
 
 <script lang="ts">
-
+import { ref, inject } from 'vue';
+import { ElMessage } from 'element-plus';
 
 export default {
 
@@ -63,6 +64,26 @@ export default {
                 fee: 648,
                 location: '北京市海淀区中关村大街1号',
             },
+        };
+    },
+
+    setup() {
+        const router = useRouter();
+
+        const handlePaymentMethodClick = (paymentMethod: string) => {
+            ElMessage({
+                message: `缴费成功！`,
+                type: 'success',
+            });
+
+            setTimeout(() => {
+                window.location.href = './additional_procedure';
+            }, 1000); // wait for 2 seconds before redirecting and reloading
+        };
+
+
+        return {
+            handlePaymentMethodClick,
         };
     },
 
