@@ -49,6 +49,9 @@
 </template>
 
 <script>
+import api from '../axios'; // Import the Axios instance
+
+
 export default {
     props: {
         type: {
@@ -60,14 +63,32 @@ export default {
         return {
             form: {
                 username: '',
-                password: ''
+                password: '',
             }
         }
     },
     methods: {
-        handleSubmit() {
-            // Handle form submission
+        async handleSubmit() {
+            try {
+                const data = {
+                    username: this.form.username,
+                    password: this.form.password,
+                    usertype: this.type
+                };
+
+                const response = await api.post('/login', data);
+console.log(response);
+                if (response.data.success) {
+                    console.log('Login successful!');
+                    // Redirect to dashboard or whatever
+                } else {
+                    console.error('Login failed:', response.data.error);
+                }
+            } catch (error) {
+                console.error('Error sending request:', error);
+            }
         }
+
     }
 }
 </script>

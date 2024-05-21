@@ -24,5 +24,8 @@ export default defineNuxtConfig({
   modules: [
     '@element-plus/nuxt'
   ],
-  elementPlus: { /** Options */ }
+  elementPlus: { /** Options */ },
+  axios: {
+    baseURL: 'http://localhost:8080', // Your Spring Boot API URL
+  },
 })
