@@ -6,12 +6,15 @@
         <h2>考试列表</h2>
         <div class="exam-cards">
             <el-row :gutter="20">
-                <el-col :span="6" v-for="(subject, index) in subjects" :key="index">
+                <el-col :span="6" v-for="(exams, index) in examInfo" :key="index">
                     <el-card>
-                        <h3>{{ subject.name }}</h3>
-                        <p>考试时间: {{ subject.examTime }}</p>
-                        <p>报名截止时间: {{ subject.registrationDeadline }}</p>
-                        <el-button type="primary" @click="handleButtonClick(subject)">{{ getButtonText(subject.status)
+                        <h3>考试科目：{{ examInfo[index].examName }}</h3>
+                        <h4>考试时间 :</h4>
+                        <p> {{ moment(examInfo[index].startExamTime).format('YYYY年M月D日HH:mm:ss') }}</p>到<p>{{
+                            moment(examInfo[index].endExamTime).format('YYYY年M月D日HH:mm:ss') }}</p>
+                        <h4>报名截止时间:</h4>
+                        <p> {{ moment(examInfo[index].endApplyTime).format('YYYY年M月D日HH:mm:ss') }}</p>
+                        <el-button type="primary" @click="handleButtonClick(subject)">{{ getButtonText(examInfo[index].status)
                             }}</el-button>
                     </el-card>
                 </el-col>
@@ -21,45 +24,20 @@
 </template>
 
 <script>
+import moment from 'moment';
+import api from '../axios'; // Import the Axios instance
 import { useRouter } from 'vue-router';
-const router = useRouter();
 export default {
     data() {
         return {
-            subjects: [
-                {
-                    id: '1111',
-                    name: '科目1',
-                    examTime: '10AM-12PM Jul 3, 2024',
-                    registrationDeadline: '11:59PM Jul 2, 2024',
-                    status: 'not_selected' // 用户状态: not_selected, selected, paid, printed, completed
-                },
-                {
-                    id: '2222',
-                    name: '科目2',
-                    examTime: '10AM-12PM Jul 3, 2024',
-                    registrationDeadline: '11:59PM Jul 2, 2024',
-                    status: 'selected'
-                },
-                {
-                    id: '3333',
-                    name: '科目3',
-                    examTime: '10AM-12PM Jul 3, 2024',
-                    registrationDeadline: '11:59PM Jul 2, 2024',
-                    status: 'completed'
-                },
-                {
-                    id: '4444',
-                    name: '科目4',
-                    examTime: '10AM-12PM Jul 3, 2024',
-                    registrationDeadline: '11:59PM Jul 2, 2024',
-                    status: 'completed'
-                }
-            ],
-            user: {
-                name: "赖世文",
-                usr_type: "individual",
-            }
+
+            examineeName: '',
+            // user: {
+            //     name: this.examineeName,
+            //     usr_type: "individual",
+            // },
+            examInfo: [],
+            moment: moment,
         }
     },
     methods: {
@@ -101,13 +79,40 @@ export default {
             // 更新状态逻辑
             subject.status = 'paid';
         },
-
         viewExamInfo(subject) {
 
             // 更新状态逻辑
             subject.status = 'completed';
+        },
+        async fetchExams(userId) {
+            // Make API call to fetch exams for the given user ID
+            api.get(`/examinee/exam/${userId}`)
+                .then(response => {
+                    this.examInfo = response.data.examInfoList;
+                    this.examineeName = response.data.examineeName;
+                    // 打印调试信息
+                    // console.log(response.data);
+                    // console.log(this.examInfo[0].endApplyTime);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
-    }
+    },
+    mounted() {
+        const userId = this.$route.query.userId;
+        this.fetchExams(userId);
+    },
+    computed: {
+        user() {
+            return {
+                name: this.examineeName,
+                usr_type: "individual",
+            }
+        }
+
+
+    },
 };
 </script>
 <style scoped>

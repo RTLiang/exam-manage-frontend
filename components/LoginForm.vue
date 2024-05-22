@@ -43,7 +43,6 @@
                 </el-form>
             </el-main>
         </el-container>
-
     </div>
 
 </template>
@@ -75,7 +74,6 @@ export default {
                     password: this.form.password,
                     usertype: this.type.trim().toLowerCase()
                 };
-
                 const response = await api.post('/login', data);
                 console.log(response);
                 if (response.data.success) {

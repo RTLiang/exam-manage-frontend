@@ -1,6 +1,6 @@
 <template>
     <div class="tool-bar">
-        
+
         <div class="button-container">
             <!-- <b>常驻功能区</b> -->
             <el-button @click="$router.push('/admin/main')" plain>管理员主页</el-button>
@@ -10,13 +10,12 @@
             <el-button @click="$router.push('/admin/individual_account')" plain>个人账号管理</el-button>
             <el-button @click="$router.push('/admin/institution_account')" plain>机构账号管理</el-button>
             <el-button @click="$router.push('/admin/examiner_manage')" plain>监考员管理</el-button>
-
+            <el-button @click="$router.push('/admin/special_need_review')" plain>特殊需求管理</el-button>
         </div>
     </div>
 
 </template>
 <style scoped>
-
 .tool-bar {
     background-color: #f0f0f0;
 
