@@ -36,7 +36,9 @@
                         <el-button @click="$router.push('/')">返回首页</el-button>
                     </el-form-item>
                 </el-form>
-                <p v-if="showSuccessMessage" style="color: green;">注册成功！正在进入登录页...</p>
+                <el-message v-if="showSuccessMessage" type="success" show-icon>
+                    注册成功！正在进入登录页...
+                </el-message>
             </el-main>
 
         </el-container>

@@ -79,8 +79,24 @@ export default {
                 const response = await api.post('/login', data);
                 console.log(response);
                 if (response.data.success) {
-                    console.log('Login successful!    '+ response.data.userId);
+                    console.log('Login successful!    ' + response.data.userId);
                     // Redirect to dashboard or whatever
+                    if (this.type === 'individual') {
+                        this.$router.push({
+                            path: '/individual/select_exam',
+                            query: { userId: response.data.userId }
+                        });
+                    } else if (this.type === 'edu') {
+                        this.$router.push({
+                            path: '/institution/select_exam',
+                            query: { userId: response.data.userId }
+                        });
+                    } else if (this.type === 'admin') {
+                        this.$router.push({
+                            path: '/admin/main',
+                            query: { userId: response.data.userId }
+                        });
+                    }
                 } else {
                     console.error('Login failed:', response.data.error);
                 }
@@ -92,6 +108,7 @@ export default {
     }
 }
 </script>
+
 
 
 <style>
