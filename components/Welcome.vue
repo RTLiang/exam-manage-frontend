@@ -15,13 +15,13 @@ export default {
   },
   computed: {
     userTypeText() {
-      if (this.user.usr_type === 'individual') {
+      if (this.user.user_type === 'individual') {
         return ('考生');
       }
-      else if (this.user.usr_type === 'edu') {
+      else if (this.user.user_type === 'edu') {
         return ('机构');
       }
-      else if (this.user.usr_type === 'admin') {
+      else if (this.user.user_type === 'admin') {
         return ('管理员');
       }
     }

@@ -14,9 +14,9 @@
                             moment(examInfo[index].endExamTime).format('YYYY年M月D日HH:mm:ss') }}</p>
                         <h4>报名截止时间:</h4>
                         <p> {{ moment(examInfo[index].endApplyTime).format('YYYY年M月D日HH:mm:ss') }}</p>
-                        <el-button type="primary" @click="handleButtonClick(subject)">{{
+                        <el-button type="primary" @click="handleButtonClick(examInfo[index])">{{
                             getButtonText(examInfo[index].status)
-                        }}
+                            }}
                         </el-button>
                     </el-card>
                 </el-col>
@@ -27,16 +27,13 @@
 
 <script>
 import moment from 'moment';
-import api from '../axios'; // Import the Axios instance
+import api from '../../axios'; // Import the Axios instance
 export default {
     data() {
         return {
 
             examineeName: '',
-            // user: {
-            //     name: this.examineeName,
-            //     usr_type: "individual",
-            // },
+            user: {},
             examInfo: [],
             moment: moment,
         }
@@ -54,17 +51,44 @@ export default {
                     return '操作';
             }
         },
-        handleButtonClick(subject) {
-            switch (subject.status) {
+        async handleButtonClick(info) {
+
+
+            switch (info.status) {
                 case 'not_selected':
-                    this.selectSubject(subject);
-                    this.$router.push({
-                        path: './confirm_exam',
-                        query: {
-                            examId: subject.examId,
-                            userId: this.$route.query.userId
+                    // console.log(this.user);
+                    try {
+                        const data = {
+                            params: {
+                                examId: info.examId,
+                                userId: this.user.user_id
+                            }
+                        };
+                        console.log(data);
+                        console.log("================================");
+                        const response = await api.get('/apply/info', data);
+                        if (response.data.endApplyTime) {
+                            this.$router.push({
+                                path: './confirm_exam',
+                                query: {
+                                    examId: response.data.examId,
+                                    userId: this.$route.query.userId,
+                                }
+                            });
+                        } else {
+                            console.error('Failed to fetch exam info:', response.data.error);
                         }
-                    });
+                        // this.selectSubject(info);
+                        // this.$router.push({
+                        //     path: './confirm_exam',
+                        //     query: {
+                        //         examId: info.examId,
+                        //         userId: this.$route.query.userId
+                        //     }
+                        // });
+                    } catch (error) {
+                        console.error(error);
+                    }
                     break;
                 case 'selected':
                     this.payForSubject(subject);
@@ -77,18 +101,20 @@ export default {
                 default:
                     break;
             }
+
         },
         selectSubject(subject) {
-            // 更新状态逻辑
-            subject.status = 'selected';
-            // Make API call to update the subject status
-            api.post(`/examinee/select_subject/${subject.examId}`, { status: 'selected' })
-            .then(response => {
-                // Handle the response
-            })
-            .catch(error => {
-                console.error(error);
-            });
+            // // 更新状态逻辑
+            // subject.status = 'selected';
+            // // console.log("===========================");
+            // // Make API call to update the subject status
+            // api.post(`/examinee/select_subject/${subject.examId}`, { status: 'selected' })
+            //     .then(response => {
+            //         // Handle the response
+            //     })
+            //     .catch(error => {
+            //         console.error(error);
+            //     });
         },
         payForSubject(subject) {
             // 更新状态逻辑
@@ -105,9 +131,9 @@ export default {
                 .then(response => {
                     this.examInfo = response.data.examInfoList;
                     this.examineeName = response.data.examineeName;
+                    this.user = response.data.userInfoList;
                     // 打印调试信息
-                    console.log(response.data);
-                    console.log(this.examInfo[0].endApplyTime);
+                    console.log(this.user);
                 })
                 .catch(error => {
                     console.error(error);
@@ -118,16 +144,10 @@ export default {
         const userId = this.$route.query.userId;
         this.fetchExams(userId);
     },
-    computed: {
-        user() {
-            return {
-                name: this.examineeName,
-                usr_type: "individual",
-            }
-        }
+    // computed: {
 
 
-    },
+    // },
 };
 </script>
 <style scoped>
