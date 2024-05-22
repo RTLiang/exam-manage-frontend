@@ -36,8 +36,8 @@
         <div class="exam-info">
           <h3>考试信息</h3>
           <p>考试科目：{{ examName }}</p>
-          <p>考试时间：{{ startExamTime }}</p>
-          <p>截止报名时间：{{ endApplyTime }}</p>
+          <p>考试时间：{{ moment(startExamTime).format('YYYY年M月D日HH:mm:ss') }}</p>
+          <p>截止报名时间：{{ moment(endApplyTime).format('YYYY年M月D日HH:mm:ss') }}</p>
           <p>考试费用：<b>{{ examPayment }}</b> 人民币</p>
         </div>
         <div class="exam-location">
@@ -55,25 +55,26 @@
               <el-col :span="7.5">
                 <el-form-item label="区（县）级地区">
                   <el-select v-model="location.district" placeholder="请选择区（县）级地区" :disabled="!location.city">
-                    <el-option v-for="district in districts" :key="district.value" :label="district.label"
-                      :value="district.value">
+                    <el-option v-for="district in districts" :key="district" :label="district" :value="district">
                     </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="考点名">
-                  <el-select v-model="location.name" placeholder="请选择考点名" :disabled="!location.district">
-                    <el-option v-for="examPoint in examPoints" :key="examPoint.value" :label="examPoint.label"
-                      :value="examPoint.value">
+                  <el-select v-model="location.id" placeholder="请选择考点名" :disabled="!location.district"
+                    @change="updateLocationName">
+                    <el-option v-for="(examCenter, index) in examCenters" :key="index"
+                      :label="examCenter.examCenterName" :value="examCenter.examCenterId">
                     </el-option>
                   </el-select>
+
                 </el-form-item>
               </el-col>
             </el-row>
             <p>此考点剩余考位：{{ location.seats }}</p>
             <el-form-item>
-              <el-button type="primary" @click="showExamRules" :disabled="!confirmed">确认报考</el-button>
+              <el-button type="primary" @click="showExamRules" :disabled="!confirmed&&location.seats>0">确认报考</el-button>
             </el-form-item>
 
           </el-form>
@@ -107,12 +108,20 @@
 
 <script lang="ts">
 import api from '../../axios'; // Import the Axios instance
+import moment from 'moment';
 
 export default {
 
 
   data() {
     return {
+      info: {
+        params: {
+          examId: this.$route.query.examId,
+          userId: this.$route.query.userId,
+        }
+      },
+      moment: moment,
       endApplyTime: "",
       examineeIDNumber: "",
       examineePhone: "",
@@ -125,14 +134,15 @@ export default {
         city: '',
         district: '',
         name: '',
-        seats: 114514
+        seats: 0,
+        id: ''
       },
       cityNames: [
       ],
       districts: [
-      ],
-      examPoints: [
-      ],
+      ] as Array<string>,
+      examCenters: [
+      ] as Array<{ examCenterId: string, examCenterName: string, regionId: string, examCenterLocation: string }>,
       confirmed: false,
       examRules: false,
     };
@@ -144,7 +154,11 @@ export default {
     },
     'location.district'(newDistrict) {
       // Update examPoints based on the selected district
-      this.examPoints = this.getExamPointsForDistrict(newDistrict);
+      this.examCenters = this.getExamPointsForDistrict(newDistrict);
+    },
+    'location.id'(newCenterid) {
+      // Update the number of seats available
+      this.location.seats = this.getSeatsForExamPoint(newCenterid);
     },
   },
   methods: {
@@ -155,28 +169,115 @@ export default {
     showExamRules() {
       this.examRules = true;
     },
-    getDistrictsForCity(city: string) {
+    async getDistrictsForCity(city: string) {
       // Implement this method to return the districts for the given city
-      console.log(city + 'CITY');
+      const data = {
+        params: {
+          examId: this.info.params.examId, // replace this with actual examId
+          cityName: city
+        }
+        // examId: this.info.params.examId, // replace this with actual examId
+        // cityName: city
+      };
+      console.log(data);
+      try {
+        const response = await api.get('/apply/districts', data);
+        console.log(response.data);
+        this.districts = response.data;
+        console.log(this.districts);
+      }
+      catch (error) {
+        console.error(error);
+        // handle error
+      }
+
     },
-    getExamPointsForDistrict(district: string) {
-      // Implement this method to return the exam points for the given district
-      console.log(district + 'DISTRICT');
+    async getExamPointsForDistrict(district: string) {
+      console.log(district);
+      const data = {
+        params: {
+          examId: this.info.params.examId, // replace this with actual examId
+          districtName: district
+        }
+      };
+      try {
+        const response = await api.get('/apply/examCenter', data);
+        // replace '/apply/examPoints' with your actual endpoint
+        console.log(response.data);
+        this.examCenters = response.data.examCenters;
+        console.log(this.examCenters[0]);
+      }
+      catch (error) {
+        console.error(error);
+        // handle error
+      }
     },
-    async fetchExamloc(userId) {
+    async getSeatsForExamPoint(examCenterId: string) {
+      const data = {
+        params: {
+          examId: this.info.params.examId, // replace this with actual examId
+          centerId: examCenterId
+        }
+      };
+      try {
+        const response = await api.get('/apply/remainNumber', data);
+        // replace '/apply/seats' with your actual endpoint
+        console.log(response.data);
+        this.location.seats = response.data;
+        console.log(this.location.seats);
+      }
+      catch (error) {
+        console.error(error);
+        // handle error
+      }
+    },
+    // async fetchExamloc(userId) {
+    //   // Make API call to fetch exams for the given user ID
+    //   api.get(`/apply//${userId}`)
+    //     .then(response => {
+    //       // this.examInfo = response.data.examInfoList;
+    //       this.examineeName = response.data.examineeName;
+    //       // 打印调试信息
+    //       // console.log(response.data);
+    //       // console.log(this.examInfo[0].endApplyTime);
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //     });
+    // },
+    async fetchExams() {
       // Make API call to fetch exams for the given user ID
-      api.get(`/apply//${userId}`)
-        .then(response => {
-          this.examInfo = response.data.examInfoList;
+      try {
+        console.log(this.info);
+        const response = await api.get('/apply/info', this.info);
+        if (response.data.endApplyTime) {
+          this.endApplyTime = response.data.endApplyTime;
+          this.examineeIDNumber = response.data.examineeIDNumber;
+          this.examineePhone = response.data.examineePhone;
+          this.examName = response.data.examName;
           this.examineeName = response.data.examineeName;
-          // 打印调试信息
-          // console.log(response.data);
-          // console.log(this.examInfo[0].endApplyTime);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
+          this.endExamTime = response.data.endExamTime;
+          this.startExamTime = response.data.startExamTime;
+          this.examPayment = response.data.examPayment;
+          this.cityNames = response.data.cityNames;
+          // console.log(this.cityNames);
+          this.districts = response.data.districts;
+          this.examCenters = response.data.examCenters;
+        } else {
+          console.error('Failed to fetch exam info:', response.data.error);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    updateLocationName(value) {
+      const selectedExamCenter = this.examCenters.find(examCenter => examCenter.examCenterId === value);
+      if (selectedExamCenter) {
+        this.location.name = selectedExamCenter.examCenterName;
+      }
+    },
+  }, mounted() {
+    this.fetchExams();
   }
 };
 </script>
