@@ -14,8 +14,10 @@
                             moment(examInfo[index].endExamTime).format('YYYY年M月D日HH:mm:ss') }}</p>
                         <h4>报名截止时间:</h4>
                         <p> {{ moment(examInfo[index].endApplyTime).format('YYYY年M月D日HH:mm:ss') }}</p>
-                        <el-button type="primary" @click="handleButtonClick(subject)">{{ getButtonText(examInfo[index].status)
-                            }}</el-button>
+                        <el-button type="primary" @click="handleButtonClick(subject)">{{
+                            getButtonText(examInfo[index].status)
+                        }}
+                        </el-button>
                     </el-card>
                 </el-col>
             </el-row>

@@ -11,8 +11,8 @@
                 <el-table-column prop="resolved" label="是否解决">
                     <template v-slot="scope">
                         <el-button v-if="!scope.row.resolved" type="primary"
-                            @click="markResolved(scope.row)">未解决</el-button>
-                        <el-button v-else type="success" disabled>已解决</el-button>
+                            @click="markResolved(scope.row)" plain>未解决</el-button>
+                        <el-button v-else type="success" disabled plain>已解决</el-button>
                     </template>
                 </el-table-column>
             </el-table>

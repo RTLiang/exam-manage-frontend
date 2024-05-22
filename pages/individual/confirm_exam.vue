@@ -54,7 +54,7 @@
               </el-col>
               <el-col :span="7.5">
                 <el-form-item label="区（县）级地区">
-                  <el-select v-model="location.district" placeholder="请选择区（县）级地区">
+                  <el-select v-model="location.district" placeholder="请选择区（县）级地区" :disabled="!location.city">
                     <el-option v-for="district in districts" :key="district.value" :label="district.label"
                       :value="district.value">
                     </el-option>
@@ -63,7 +63,7 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="考点名">
-                  <el-select v-model="location.name" placeholder="请选择考点名">
+                  <el-select v-model="location.name" placeholder="请选择考点名" :disabled="!location.district">
                     <el-option v-for="examPoint in examPoints" :key="examPoint.value" :label="examPoint.label"
                       :value="examPoint.value">
                     </el-option>
@@ -83,7 +83,17 @@
     </el-row>
     <!-- 考试须知 -->
     <el-dialog v-model="examRules" title="考试须知" width="500">
-      <span>这是一条又臭又长的考试须知，现在的内容肯定要改，不过就先这样吧，点击“我已阅读并了解”。</span>
+      <div>
+        <h4>考试须知：</h4>
+        <ul>
+          <li>请务必准时参加考试。</li>
+          <li>考试过程中请保持安静，不要交头接耳。</li>
+          <li>禁止携带任何通讯工具进入考场。</li>
+          <li>考试结束后，请将试卷和答题卡交给监考人员。</li>
+          <li>违反考场纪律的行为将被取消考试资格。</li>
+        </ul>
+        <p>点击“我已阅读并了解”按钮确认。</p>
+      </div>
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="examRules = false">
@@ -119,23 +129,32 @@ export default {
         seats: 114514
       },
       cities: [
-        { value: 'city1', label: 'City 1' },
-        { value: 'city2', label: 'City 2' },
-        // ...
+        {
+          value: 'beijing',
+          label: '北京'
+        },
+        {
+          value: 'shanghai',
+          label: '上海'
+        }
       ],
       districts: [
-        { value: 'district1', label: 'District 1' },
-        { value: 'district2', label: 'District 2' },
-        // ...
       ],
       examPoints: [
-        { value: 'examPoint1', label: 'Exam Point 1' },
-        { value: 'examPoint2', label: 'Exam Point 2' },
-        // ...
       ],
       confirmed: false,
       examRules: false,
     };
+  },
+  watch: {
+    'location.city'(newCity) {
+      // Update districts based on the selected city
+      this.districts = this.getDistrictsForCity(newCity);
+    },
+    'location.district'(newDistrict) {
+      // Update examPoints based on the selected district
+      this.examPoints = this.getExamPointsForDistrict(newDistrict);
+    },
   },
   methods: {
 
@@ -144,6 +163,14 @@ export default {
     },
     showExamRules() {
       this.examRules = true;
+    },
+    getDistrictsForCity(city) {
+      // Implement this method to return the districts for the given city
+      console.log(city + 'CITY');
+    },
+    getExamPointsForDistrict(district) {
+      // Implement this method to return the exam points for the given district
+      console.log(district + 'DISTRICT');
     },
   }
 };
