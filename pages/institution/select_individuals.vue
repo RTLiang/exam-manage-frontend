@@ -6,12 +6,16 @@
             <div style="margin-top: 20;">报名截止时间：{{ subject.registrationDeadline }}</div>
         </el-header>
         <el-main>
+
+
+
+
             <div class="search-bar">
                 <el-input v-model="searchQuery" placeholder="搜索考生姓名或号码" />
             </div>
             <div class="table-container">
-                <el-table ref="table" :data="filteredStudentsData" stripe border @selection-change="handleSelectionChange"
-                    @filter-change="handleFilterChange">
+                <el-table ref="table" :data="filteredStudentsData" stripe border
+                    @selection-change="handleSelectionChange" @filter-change="handleFilterChange">
                     <el-table-column type="selection" :selectable="selectableRow" />
                     <el-table-column prop="studentId" label="考生号" />
                     <el-table-column prop="name" label="姓名" />
@@ -112,6 +116,8 @@ export default {
 }
 
 .search-bar {
+    margin-left: 15%;
+    margin-right: 15%;
     margin-bottom: 20px;
 }
 
