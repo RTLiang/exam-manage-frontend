@@ -28,7 +28,6 @@
 <script>
 import moment from 'moment';
 import api from '../axios'; // Import the Axios instance
-import { useRouter } from 'vue-router';
 export default {
     data() {
         return {
@@ -59,7 +58,13 @@ export default {
             switch (subject.status) {
                 case 'not_selected':
                     this.selectSubject(subject);
-                    this.$router.push('./confirm_exam');
+                    this.$router.push({
+                        path: './confirm_exam',
+                        query: {
+                            examId: subject.examId,
+                            userId: this.$route.query.userId
+                        }
+                    });
                     break;
                 case 'selected':
                     this.payForSubject(subject);
@@ -76,6 +81,14 @@ export default {
         selectSubject(subject) {
             // 更新状态逻辑
             subject.status = 'selected';
+            // Make API call to update the subject status
+            api.post(`/examinee/select_subject/${subject.examId}`, { status: 'selected' })
+            .then(response => {
+                // Handle the response
+            })
+            .catch(error => {
+                console.error(error);
+            });
         },
         payForSubject(subject) {
             // 更新状态逻辑
@@ -93,8 +106,8 @@ export default {
                     this.examInfo = response.data.examInfoList;
                     this.examineeName = response.data.examineeName;
                     // 打印调试信息
-                    // console.log(response.data);
-                    // console.log(this.examInfo[0].endApplyTime);
+                    console.log(response.data);
+                    console.log(this.examInfo[0].endApplyTime);
                 })
                 .catch(error => {
                     console.error(error);

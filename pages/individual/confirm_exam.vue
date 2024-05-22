@@ -7,15 +7,15 @@
       <el-col :span="6">
         <div class="student-info">
           <h3>请核对考生信息</h3>
-          <el-form :model="student" label-width="90px">
+          <el-form label-width="90px">
             <el-form-item label="姓名">
-              <el-input v-model="student.name" readonly></el-input>
+              <el-input v-model="examineeName" readonly></el-input>
             </el-form-item>
             <el-form-item label="电话号码">
-              <el-input v-model="student.phone" readonly></el-input>
+              <el-input v-model="examineePhone" readonly></el-input>
             </el-form-item>
             <el-form-item label="身份证号码">
-              <el-input v-model="student.id" readonly></el-input>
+              <el-input v-model="examineeIDNumber" readonly></el-input>
             </el-form-item>
 
 
@@ -35,10 +35,10 @@
       <el-col :span="18">
         <div class="exam-info">
           <h3>考试信息</h3>
-          <p>考试科目：{{ exam.subject }}</p>
-          <p>考试时间：{{ exam.examTime }}</p>
-          <p>截止报名时间：{{ exam.deadline }}</p>
-          <p>考试费用：<b>{{ exam.fee }}</b> 人民币</p>
+          <p>考试科目：{{ examName }}</p>
+          <p>考试时间：{{ startExamTime }}</p>
+          <p>截止报名时间：{{ endApplyTime }}</p>
+          <p>考试费用：<b>{{ examPayment }}</b> 人民币</p>
         </div>
         <div class="exam-location">
           <h3>选择考点</h3>
@@ -47,7 +47,7 @@
               <el-col :span="7.5">
                 <el-form-item label="市（州）级地区">
                   <el-select v-model="location.city" placeholder="请选择市（州）级地区">
-                    <el-option v-for="city in cities" :key="city.value" :label="city.label" :value="city.value">
+                    <el-option v-for="city in cityNames" :key="city" :label="city" :value="city">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -106,37 +106,28 @@
 </template>
 
 <script lang="ts">
-
+import api from '../../axios'; // Import the Axios instance
 
 export default {
+
+
   data() {
     return {
-      student: {
-        name: '张三',
-        id: '123456789012345678',
-        phone: '13800138000'
-      },
-      exam: {
-        subject: '科目三',
-        examTime: '2024年5月1日 15:00-17:00',
-        deadline: '2024年4月30日 23:00',
-        fee: 648
-      },
+      endApplyTime: "",
+      examineeIDNumber: "",
+      examineePhone: "",
+      examName: "",
+      examineeName: "",
+      endExamTime: "",
+      startExamTime: "",
+      examPayment: -1,
       location: {
         city: '',
         district: '',
         name: '',
         seats: 114514
       },
-      cities: [
-        {
-          value: 'beijing',
-          label: '北京'
-        },
-        {
-          value: 'shanghai',
-          label: '上海'
-        }
+      cityNames: [
       ],
       districts: [
       ],
@@ -164,14 +155,28 @@ export default {
     showExamRules() {
       this.examRules = true;
     },
-    getDistrictsForCity(city) {
+    getDistrictsForCity(city: string) {
       // Implement this method to return the districts for the given city
       console.log(city + 'CITY');
     },
-    getExamPointsForDistrict(district) {
+    getExamPointsForDistrict(district: string) {
       // Implement this method to return the exam points for the given district
       console.log(district + 'DISTRICT');
     },
+    async fetchExamloc(userId) {
+      // Make API call to fetch exams for the given user ID
+      api.get(`/apply//${userId}`)
+        .then(response => {
+          this.examInfo = response.data.examInfoList;
+          this.examineeName = response.data.examineeName;
+          // 打印调试信息
+          // console.log(response.data);
+          // console.log(this.examInfo[0].endApplyTime);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }
 };
 </script>

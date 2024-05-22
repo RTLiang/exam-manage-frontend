@@ -34,6 +34,7 @@
             <el-button link type="primary" size="small" @click="handleClick">查看违规信息</el-button>
           </template>
         </el-table-column>
+        
       </el-table>
     </div>
     <br>

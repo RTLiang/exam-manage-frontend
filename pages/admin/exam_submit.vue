@@ -3,7 +3,7 @@
     <Admin />
     <div class="exam-submit-box">
         <br>
-        <h2>添加考试</h2>
+        <h2>新建考试</h2>
         <div class="exam-submit">
             <el-form ref="examForm" :model="exam" label-width="120px" style="max-width: 70%;">
                 <el-form-item label="考试科目">
