@@ -7,13 +7,13 @@
     <h2>管理列表</h2>
     <div class="function-cards">
       <el-row :gutter="20" justify="center">
-        <el-col :span="4" v-for="(entry, index) in entries" :key="index">
-          <el-card class="function-card">
-            <h3>{{ entry.entryname }}</h3>
-            <el-button type="primary" @click="$router.push(entry.path)">进入</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
+  <el-col :span="6" v-for="(entry, index) in entries" :key="index">
+    <el-card class="function-card">
+      <h3>{{ entry.entryname }}</h3>
+      <el-button type="primary" @click="$router.push(entry.path)">进入</el-button>
+    </el-card>
+  </el-col>
+</el-row>
     </div>
   </div>
 </template>
@@ -46,7 +46,14 @@ export default {
         {
           entryname: '机构账号管理',
           path: '/admin/institution_account',
+        }, {
+          entryname: '监考员管理',
+          path: '/admin/examiner_manage'
         },
+        {
+          entryname: '特殊需求审核',
+          path: '/admin/special_need_review'
+        }
       ],
     }
   }
@@ -64,6 +71,9 @@ export default {
 }
 
 .function-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
   background-color: #f3f3f3;
   border-radius: 5px;
   padding: 20px;
@@ -74,6 +84,8 @@ export default {
 .function-card {
   margin: 10px 0;
   text-align: center;
+  max-width: 200px; /* Adjust this value as needed */
+  width: 80%; /* This will make the card take up the full width of its container, up to the max-width */
 }
 
 .function-card h3 {
