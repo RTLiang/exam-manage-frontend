@@ -45,6 +45,7 @@
 
 </template>
 <script>
+import api from '../axios'
 export default {
     data() {
         return {
@@ -61,7 +62,7 @@ export default {
 
     },
     methods: {
-        handleSubmit() {
+        async handleSubmit() {
             if (!this.validateForm()) {
                 return; // prevent form submission if passwords don't match
             }
@@ -71,14 +72,33 @@ export default {
 
             //TODO 连接数据库登录
 
+            try {
+                const data = {
+                    examineeName: this.form.name,
+                    password: this.form.password,
+                    examineeIDNumber: this.form.idNumber,
+                    examineePhone: this.form.phone,
+                    examineeEmail: this.form.email
+                };
 
+                const response = await api.post('/examinee', data);
+                console.log(response);
+                if (response.status === 200) {
+                    console.log('SignIn    ' + response.data.userId);
+                    // Redirect to dashboard or whatever
+                    this.showSuccessMessage = true; // show the success message
 
-            this.showSuccessMessage = true; // show the success message
+                    // Redirect to login page
+                    setTimeout(() => {
+                        this.$router.push('/login');
+                    }, 1500);
+                } else {
+                    console.error('Sign up failed:', response.data.error);
+                }
+            } catch (error) {
+                console.error('Error sending request:', error);
+            }
 
-            // Redirect to login page
-            setTimeout(() => {
-                this.$router.push('/login');
-            }, 1500);
         },
         validateForm() {
             if (this.form.password !== this.form.confirmPassword) {
