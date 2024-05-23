@@ -17,11 +17,10 @@
                 <el-table ref="table" :data="filteredStudentsData" stripe border
                     @selection-change="handleSelectionChange" @filter-change="handleFilterChange">
                     <el-table-column type="selection" :selectable="selectableRow" />
-                    <el-table-column prop="studentId" label="考生号" />
+                    <el-table-column prop="userId" label="考生号" />
                     <el-table-column prop="name" label="姓名" />
-                    <el-table-column prop="phoneNumber" label="手机号码" />
-                    <el-table-column prop="idNumber" label="身份证号码" />
-                    <el-table-column prop="isApply" label="是否已报考本科目" sortable :formatter="ShiFouType"
+                    <el-table-column prop="phone" label="手机号码" />
+                    <el-table-column prop="applyStatus" label="是否已报考本科目" sortable :formatter="ShiFouType"
                         :filter-method="filterIsApply" />
                 </el-table>
             </div>
@@ -35,25 +34,13 @@
 </template>
 
 <script>
+import api from '../../axios';
 export default {
     data() {
         return {
+            userId: this.$route.query.userId,
+            examId: this.$route.query.examId,
             studentsData: [
-                {
-                    studentId: '2022001',
-                    name: '张三',
-                    phoneNumber: '13812345678',
-                    isApply: true,
-                    idNumber: '123456789012345678',
-                },
-                {
-                    studentId: '2022002',
-                    name: '李四',
-                    phoneNumber: '13898765432',
-                    isApply: false,
-                    idNumber: '178930012345678',
-                },
-                // ...
             ],
             searchQuery: '',
             selectedRows: [],
@@ -63,8 +50,7 @@ export default {
                 registrationDeadline: '11:59PM Jul 2, 2024',
             },
             user: {
-                name: "史坦杜大学",
-                usr_type: "edu"
+                name: "",
             },
         }
     },
@@ -100,6 +86,72 @@ export default {
                 return ("否");
             }
         },
+        fetchStudentData() {
+            api.get('/eduApply/examineeList', {
+                params: {
+                    userId: this.userId,
+                    examId: this.examId
+                }
+            })
+                .then(response => {
+                    this.studentsData = response.data.examineeInfoList;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+        fetchExamandOrgInfo() {
+            api.get('/eduApply/examInfo', {
+                params: {
+                    userId: this.userId
+                }
+            })
+                .then(response => {
+                    this.subject.name = response.data.examInfoList.find(subject => subject.examId === this.examId).examName;
+                    this.subject.id = this.examId;
+                    this.subject.registrationDeadline = this.parseTime(response.data.examInfoList.find(subject => subject.examId === this.examId).endApplyTime);
+                    this.user.name = response.data.organizationName;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+        parseTime(timeString) {
+            let dateTime = new Date(timeString);
+            let year = dateTime.getFullYear();
+            let month = dateTime.getMonth() + 1;
+            let day = dateTime.getDate();
+            let hour = dateTime.getHours();
+            let minute = dateTime.getMinutes();
+
+            return `${year}年${month}月${day}日${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        },
+        confirmSignup() {
+            const selectedUserIds = this.selectedRows.map(row => row.userId);
+            api.post('/eduApply/exam', {
+                userId: this.userId,
+                examId: this.examId,
+            })
+                .then(response => {
+                    this.$message({
+                        message: '报名成功',
+                        type: 'success'
+                    });
+                    this.$router.push('/institution/select_exam');
+                })
+                .catch(error => {
+                    console.error(error);
+                    this.$message({
+                        message: '报名失败',
+                        type: 'error'
+                    });
+                });
+        }
+
+    },
+    mounted() {
+        this.fetchStudentData();
+        this.fetchExamandOrgInfo();
     }
 }
 </script>
