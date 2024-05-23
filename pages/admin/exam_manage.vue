@@ -15,26 +15,13 @@
         <el-table-column prop="end_exam" label="考试结束时间" />
         <el-table-column prop="exam_type" label="考试类型" />
         <el-table-column prop="fee" label="考试费用" />
-        <el-table-column label="考试人数">
-          <template #default="scope">
-            {{ scope.row.exam_centers.reduce((acc, center) => acc + center.number, 0) }}
-          </template>
-        </el-table-column>
-
-        <el-table-column label="考点信息" width="fit-content">
-          <template #default="scope">
-            <div v-for="(center, index) in scope.row.exam_centers" :key="index">
-              {{ center.center }} ({{ center.number }})
-            </div>
-          </template>
-        </el-table-column>
         <el-table-column fixed="right" label="操作">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="extendRegistration(scope.row)">延长报考时间</el-button>
-            <el-button link type="primary" size="small" @click="handleClick">查看违规信息</el-button>
+            <!-- <el-button link type="primary" size="small" @click="handleClick">查看违规信息</el-button> -->
           </template>
         </el-table-column>
-        
+
       </el-table>
     </div>
     <br>
@@ -49,58 +36,19 @@
   </el-dialog>
 </template>
 
-
-
 <script lang="ts">
+import api from "../../axios"
+
+import { ElMessage } from 'element-plus';
+
 export default {
   data() {
     return {
       searchQuery: '',
-      exam_info: [
-        {
-          exam_name: "Mathematics",
-          start_register: "2022-01-01 09:00:00",
-          end_register: "2022-01-10 18:00:00",
-          start_exam: "2022-01-15 09:00:00",
-          end_exam: "2022-01-15 11:00:00",
-          exam_type: "Written",
-          exam_centers: [
-            { center: "Room 101", number: 20 },
-            { center: "Room 102", number: 30 },
-          ],
-          fee: 50.0,
-        },
-        {
-          exam_name: "Science",
-          start_register: "2022-02-01 09:00:00",
-          end_register: "2022-02-10 18:00:00",
-          start_exam: "2022-02-15 09:00:00",
-          end_exam: "2022-02-15 11:00:00",
-          exam_type: "Practical",
-          exam_centers: [
-            { center: "Room 202", number: 20 },
-            { center: "Room 203", number: 10 },
-          ],
-          fee: 30.0,
-        },
-        {
-          exam_name: "English",
-          start_register: "2022-03-01 09:00:00",
-          end_register: "2022-03-10 18:00:00",
-          start_exam: "2022-03-15 09:00:00",
-          end_exam: "2022-03-15 11:00:00",
-          exam_type: "Oral",
-          exam_centers: [
-            { center: "Room 303", number: 15 },
-            { center: "Room 304", number: 10 },
-          ],
-          fee: 20.0,
-        },
-        // Add more data as needed...
-      ],
+      exam_info: [],
       extendRegistrationDialogVisible: false,
       newEndRegisterTime: '',
-      examToExtend: null, // <--- Add this
+      examToExtend: null,
     };
   },
   computed: {
@@ -118,7 +66,6 @@ export default {
         );
       });
     }
-
   },
   methods: {
     handleClick() {
@@ -128,7 +75,7 @@ export default {
       this.extendRegistrationDialogVisible = true;
       this.examToExtend = exam;
     },
-    confirmExtendRegistration() {
+   async confirmExtendRegistration() {
       const currentTime = new Date();
       const newEndTime = new Date(this.newEndRegisterTime);
       const startExamTime = new Date(this.examToExtend.start_exam);
@@ -143,11 +90,36 @@ export default {
         return;
       }
 
-      this.examToExtend.end_register = this.newEndRegisterTime;
       this.extendRegistrationDialogVisible = false;
-      this.newEndRegisterTime = '';
+
+      // Call the API to update the endApplyTime of the exam
+
     },
+    async fetchExams() {
+      try {
+        const response = await api.get('/manage/exam');
+        this.exam_info = response.data.map(exam => ({
+          exam_name: exam.examName,
+          start_register: this.formatDate(exam.startApplyTime),
+          end_register: this.formatDate(exam.endApplyTime),
+          start_exam: this.formatDate(exam.startExamTime),
+          end_exam: this.formatDate(exam.endExamTime),
+          exam_type: exam.examForm,
+          fee: exam.examPayment,
+          exam_centers: [] // Assuming this data is missing from the API response
+        }));
+      } catch (error) {
+        console.error('Failed to fetch exam data:', error);
+      }
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+      return new Date(dateString).toLocaleDateString('zh-CN', options).replace(/\//g, '年').replace('年', '月').replace('月', '日 ');
+    }
   },
+  created() {
+    this.fetchExams();
+  }
 }
 </script>
 
@@ -155,7 +127,6 @@ export default {
 .exam-list {
   width: 95%;
   margin: 0 auto;
-
 }
 
 .exam-list-box {
