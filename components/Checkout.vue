@@ -163,9 +163,10 @@ export default {
       return `${year}年${month}月${date}日${startHour}:${startMinute}:${startSecond}到${endHour}:${endMinute}:${endSecond}`;
     }
   },
-  created() {
+  mounted() {
     console.log(this.$route.query);
     this.fetchexaminfo();
+    console.log();
   }
 };
 </script>

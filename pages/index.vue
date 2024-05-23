@@ -18,7 +18,7 @@
             <div class="exam-procedure">
                 <h2>考试报名流程</h2>
                 <br>
-                <img src="https://resource.neea.edu.cn/project/CET/images/bz1.png" alt="考试流程">
+                <img src="./assets/exam_procedure.png" alt="考试流程">
                 <!-- TODO：alt text write detailed content -->
             </div>
             <br>

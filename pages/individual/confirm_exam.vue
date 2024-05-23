@@ -17,9 +17,7 @@
             <el-form-item label="身份证号码">
               <el-input v-model="examineeIDNumber" readonly></el-input>
             </el-form-item>
-
-
-            <div v-if="!confirmed">
+            <div v-if="!infoconfirmed">
               <el-button type="primary" class="button-confirm" @click="confirmInfo">确认信息无误</el-button>
               <br>
               <br>
@@ -30,7 +28,6 @@
             </div>
           </el-form>
         </div>
-
       </el-col>
       <el-col :span="18">
         <div class="exam-info">
@@ -68,13 +65,13 @@
                       :label="examCenter.examCenterName" :value="examCenter.examCenterId">
                     </el-option>
                   </el-select>
-
                 </el-form-item>
               </el-col>
             </el-row>
             <p>此考点剩余考位：{{ location.seats }}</p>
             <el-form-item>
-              <el-button type="primary" @click="showExamRules" :disabled="!confirmed&&location.seats>0">确认报考</el-button>
+              <el-button type="primary" @click="showExamRules"
+                :disabled="(!infoconfirmed) || (location.seats <= 0)">确认报考</el-button>
             </el-form-item>
 
           </el-form>
@@ -97,7 +94,7 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="examRules = false">
+          <el-button type="primary" @click="confirmexam">
             我已阅读并了解
           </el-button>
         </div>
@@ -111,8 +108,6 @@ import api from '../../axios'; // Import the Axios instance
 import moment from 'moment';
 
 export default {
-
-
   data() {
     return {
       info: {
@@ -134,7 +129,7 @@ export default {
         city: '',
         district: '',
         name: '',
-        seats: 0,
+        seats: 0 ,
         id: ''
       },
       cityNames: [
@@ -143,6 +138,7 @@ export default {
       ] as Array<string>,
       examCenters: [
       ] as Array<{ examCenterId: string, examCenterName: string, regionId: string, examCenterLocation: string }>,
+      infoconfirmed: false,
       confirmed: false,
       examRules: false,
     };
@@ -162,9 +158,19 @@ export default {
     },
   },
   methods: {
-
     confirmInfo() {
+      this.infoconfirmed = true;
+    },
+    confirmexam() {
       this.confirmed = true;
+      this.$router.push({
+        path: './checkout',
+        query: {
+          examId: this.info.params.examId,
+          userId: this.info.params.userId,
+          centerId: this.location.id
+        }
+      });
     },
     showExamRules() {
       this.examRules = true;
