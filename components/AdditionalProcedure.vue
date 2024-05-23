@@ -3,14 +3,14 @@
     <div class="info_page">
         <el-container>
             <el-header>
-                <h2 v-if="type === 'individual'"> 考生 {{ name }} ，您已成功报名 {{ exam.examName }}</h2>
+                <h2 v-if="type === 'individual'"> 考生 {{ this.examinee.examineeName }} ，您已成功报名 {{ exam.examName }}</h2>
                 <h2 v-else-if="type === 'edu'">机构 {{ name }} 已成功为 {{ studentNumber }} 人报考 {{ exam.examName }}</h2>
                 <div class="print_prompt" style="font-size: 24px;">
-                    请于 <b style="color: #0066CC;">{{ exam.endAppllyTime }}</b> 到 <b style=" color: #0066CC;">{{
-                        exam.startExamTime }}</b> 打印准考证
+                    请于 <b style="color: #0066CC;">{{ parseTime(exam.endAppllyTime) }}</b> 到 <b
+                        style=" color: #0066CC;">{{ parseTime(exam.startExamTime) }}</b> 打印准考证
                 </div>
                 <h3>
-                    考试时间：{{ exam.startExamTime }} 到 {{ exam.exameEndTime }}
+                    考试时间：{{ parseTime(exam.startExamTime) }} 
                 </h3>
                 <hr>
             </el-header>
@@ -23,7 +23,8 @@
 
                 <el-button size="large" type="primary" :disabled="!isPrintAvaliable">准考证打印</el-button>
                 <el-button size="large" type="danger" @click="$router.push('/')">安全退出</el-button>
-                <el-button v-if="type === 'individual'" size="large" @click="$router.push('/individual/special')"
+                <el-button v-if="type === 'individual'" size="large"
+                    @click="tospecial"
                     plain>特殊考生申请</el-button>
             </el-main>
         </el-container>
@@ -41,12 +42,17 @@ export default {
             type: String,
             required: true
         },
-        name: {
-            
-        },
         studentNumber: {
             type: Number,
             default: 1,
+        },
+        examid: {
+            type: String,
+            required: true
+        },
+        userid:{
+            type: String,
+            required: true
         }
     },
     data() {
@@ -64,33 +70,60 @@ export default {
             isPrintAvaliable: false,
         };
     },
-    mounted() {
+   async mounted() {
+        await  this.fetchexaminfo();
         this.checkPrintAvailability();
+        
     },
     methods: {
         checkPrintAvailability() {
             const currentTime = moment();
-            const deadline = moment(this.exam.startExamTime); // parse deadline
-            const examStartTime = moment(this.exam.endAppllyTime); // parse exam start time
+            const deadline = moment(this.exam.endAppllyTime);
+            const examStartTime = moment(this.exam.startExamTime);
 
-            if (currentTime >= deadline && currentTime <= examStartTime) {
+            if (currentTime.isSameOrAfter(deadline) && currentTime.isSameOrBefore(examStartTime)) {
                 this.isPrintAvaliable = true;
             } else {
                 this.isPrintAvaliable = false;
             }
+            console.log("checked"+this.isPrintAvaliable);
         },
         async fetchexaminfo() {
-            const res = await api.get('/apply/pay', {
-                params: {
-                    examId: this.$route.query.examId,
-                    userId: this.$route.query.userId,
+            const res = await api.post(`/apply/pay?examId=${this.examid}&userId=${this.$route.query.userId}`);
+            console.log(res);
+            if (res.data.exam) {
+                this.exam.examName = res.data.exam.examName;
+                this.exam.startExamTime = res.data.exam.startExamTime;
+                this.exam.endAppllyTime = res.data.exam.endAppllyTime;
+                this.exam.examId = res.data.exam.examId;
+                this.examinee.userId = res.data.examinee.userId;
+                this.examinee.examineeName = res.data.examinee.examineeName;
+                this.checkPrintAvailability();
+
+            }
+        },
+        parseTime(timeString) {
+            let dateTime = new Date(timeString);
+            let year = dateTime.getFullYear();
+            let month = dateTime.getMonth() + 1;
+            let day = dateTime.getDate();
+            let hour = dateTime.getHours();
+            let minute = dateTime.getMinutes();
+
+            return `${year}年${month}月${day}日${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        },
+        tospecial() {
+            this.$router.push({
+                path: './special',
+                query: {
+                    userId: this.examinee.userId,
+                    examId: this.exam.examId,
                 }
             });
-            this.exam = res.data.exam;
-            this.examinee = res.data.examinee;
-        },
+        }
     },
 };
+
 </script>
 
 <style scoped>

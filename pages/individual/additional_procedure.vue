@@ -1,6 +1,6 @@
 <template>
     <Banner />
-    <AdditionalProcedure type="individual" name = this.examinee.examineeName :studentNumber=1 />
+    <AdditionalProcedure type="individual" :userid = this.$route.query.userId :studentNumber=1 :examid=this.$route.query.examId />
 </template>
 
 <script>
@@ -23,6 +23,7 @@ export default {
                 }
             });
             if (res.data.examinee) {
+                console.log("fetchexamineeinfo");
                 console.log(res.data);
                 this.examinee.examineeName = res.data.examinee.name;
             }

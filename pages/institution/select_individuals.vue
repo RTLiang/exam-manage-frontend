@@ -2,14 +2,12 @@
     <Banner />
     <el-container>
         <el-header>
-            <div style="font-size: x-large;margin-top: 10px;">{{ user.name }}：请选择报考 <b>{{ subject.name }}</b> 的考生</div>
+            <div style="font-size: x-large; margin-top: 10px;">
+                {{ user.name }}：请选择报考 <b>{{ subject.name }}</b> 的考生
+            </div>
             <div style="margin-top: 20;">报名截止时间：{{ subject.registrationDeadline }}</div>
         </el-header>
         <el-main>
-
-
-
-
             <div class="search-bar">
                 <el-input v-model="searchQuery" placeholder="搜索考生姓名或号码" />
             </div>
@@ -26,7 +24,7 @@
             </div>
         </el-main>
         <el-footer>
-            <el-button type="primary" plain :disabled="!hasSelected">
+            <el-button type="primary" plain :disabled="!hasSelected" @click="confirmSignup">
                 确认报考以上考生
             </el-button>
         </el-footer>
@@ -40,8 +38,7 @@ export default {
         return {
             userId: this.$route.query.userId,
             examId: this.$route.query.examId,
-            studentsData: [
-            ],
+            studentsData: [],
             searchQuery: '',
             selectedRows: [],
             subject: {
@@ -80,11 +77,7 @@ export default {
             return row.isApply === value;
         },
         ShiFouType(row, column, cellValue) {
-            if (cellValue) {
-                return ("是");
-            } else {
-                return ("否");
-            }
+            return cellValue ? "是" : "否";
         },
         fetchStudentData() {
             api.get('/eduApply/examineeList', {
@@ -129,15 +122,17 @@ export default {
         confirmSignup() {
             const selectedUserIds = this.selectedRows.map(row => row.userId);
             api.post('/eduApply/exam', {
-                userId: this.userId,
                 examId: this.examId,
+                userIdList : selectedUserIds  // Include the selected user IDs in the payload
             })
                 .then(response => {
-                    this.$message({
-                        message: '报名成功',
-                        type: 'success'
+                    this.$router.push({
+                        path: '/institution/confirm_exam',
+                        query: {
+                            examId: this.examId,
+                            userIdList:selectedUserIds
+                        }
                     });
-                    this.$router.push('/institution/select_exam');
                 })
                 .catch(error => {
                     console.error(error);
@@ -147,7 +142,6 @@ export default {
                     });
                 });
         }
-
     },
     mounted() {
         this.fetchStudentData();
@@ -164,7 +158,6 @@ export default {
     justify-content: center;
     align-items: center;
     height: 80px;
-    /* adjust the height to your liking */
 }
 
 .search-bar {
@@ -177,8 +170,6 @@ export default {
     display: flex;
     justify-content: center;
     margin: 40px auto;
-    /* add some margin top and bottom */
-
     background-color: white;
     border: 1px solid #ddd;
     padding: 10px;

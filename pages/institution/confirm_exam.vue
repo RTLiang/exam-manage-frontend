@@ -48,18 +48,16 @@
                             </el-col>
                             <el-col :span="7.5">
                                 <el-form-item label="区（县）级地区">
-                                    <el-select v-model="location.district" placeholder="请选择区（县）级地区">
-                                        <el-option v-for="district in districts" :key="district" :label="district"
-                                            :value="district">
+                                    <el-select v-model="location.district" placeholder="请选择区（县）级地区" :disabled="!location.city">
+                                        <el-option v-for="district in districts" :key="district" :label="district" :value="district">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="7">
                                 <el-form-item label="考点名">
-                                    <el-select v-model="location.name" placeholder="请选择考点名">
-                                        <el-option v-for="examPoint in examPoints" :key="examPoint" :label="examPoint"
-                                            :value="examPoint">
+                                    <el-select v-model="location.id" placeholder="请选择考点名" :disabled="!location.district" @change="updateLocationName">
+                                        <el-option v-for="(examCenter, index) in examCenters" :key="index" :label="examCenter.examCenterName" :value="examCenter.examCenterId">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
@@ -67,13 +65,33 @@
                         </el-row>
                         <p>此考点剩余考位：{{ location.seats }}</p>
                         <el-form-item>
-                            <el-button type="primary" :disabled="!confirmed" @click="Signup">确认报考</el-button>
+                            <el-button type="primary" :disabled="!confirmed" @click="showExamRules">确认报考</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
         </el-row>
     </div>
+    <el-dialog v-model="examRules" title="考试须知" width="500">
+        <div>
+            <h4>考试须知：</h4>
+            <ul>
+                <li>请务必准时参加考试。</li>
+                <li>考试过程中请保持安静，不要交头接耳。</li>
+                <li>禁止携带任何通讯工具进入考场。</li>
+                <li>考试结束后，请将试卷和答题卡交给监考人员。</li>
+                <li>违反考场纪律的行为将被取消考试资格。</li>
+            </ul>
+            <p>点击“我已阅读并了解”按钮确认。</p>
+        </div>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="primary" @click="confirmexam">
+                    我已阅读并了解
+                </el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <script>
@@ -81,35 +99,30 @@ import api from '../../axios';
 export default {
     data() {
         return {
-            exam: {
-
-            },
+            exam: {},
             location: {
                 city: '',
                 district: '',
                 name: '',
                 seats: 0,
+                id: ''
             },
             cities: [],
             districts: [],
             examCenters: [],
-            studentsData: [
-
-            ],
+            studentsData: [],
             confirmed: false,
+            examRules: false
         }
     },
     watch: {
         'location.city'(newCity) {
-            // Update districts based on the selected city
             this.districts = this.getDistrictsForCity(newCity);
         },
         'location.district'(newDistrict) {
-            // Update examPoints based on the selected district
             this.examCenters = this.getExamPointsForDistrict(newDistrict);
         },
         'location.id'(newCenterid) {
-            // Update the number of seats available
             this.location.seats = this.getSeatsForExamPoint(newCenterid);
         },
     },
@@ -117,27 +130,18 @@ export default {
         confirmInfo() {
             this.confirmed = true;
         },
-        Signup() {
-            api.post('/eduApply/exam', {
-                examId: this.$route.query.examId,
-                userIdList: this.$route.query.userIdList,  // Include the selected user IDs in the payload
-            })
-                .then(response => {
-                    console.log(this.$route.query.userIdList);
-                    this.studentsData = response.data.examinee;
-                    this.cities = response.data.cityNames;
-                    this.exam = response.data.exam;
-                    console.log("response");
-                    console.log(response);
-                    console.log("this.studentsData");
-                    console.log(this.studentsData);
-                    console.log("this.cities");
-                    console.log(this.cities);
-                    console.log(this.exam);
-                })
-                .catch(error => {
-                    console.error(error);
+        async Signup() {
+            try {
+                const response = await api.post('/eduApply/exam', {
+                    examId: this.$route.query.examId,
+                    userIdList: this.$route.query.userIdList,
                 });
+                this.studentsData = response.data.examinee;
+                this.cities = response.data.cityNames;
+                this.exam = response.data.exam;
+            } catch (error) {
+                console.error(error);
+            }
         },
         parseTime(timeString) {
             let dateTime = new Date(timeString);
@@ -146,12 +150,59 @@ export default {
             let day = dateTime.getDate();
             let hour = dateTime.getHours();
             let minute = dateTime.getMinutes();
-
             return `${year}年${month}月${day}日${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-        }
+        },
+        showExamRules() {
+            this.examRules = true;
+        },
+        confirmexam() {
+            this.$router.push({
+                path: './checkout',
+                query: {
+                    examId: this.$route.query.examId,
+                    userIdList: this.$route.query.userIdList,
+                    centerId: this.location.id
+                }
+            });
+        },
+        async getDistrictsForCity(city) {
+            try {
+                const response = await api.get('/apply/districts', {
+                    params: { examId: this.$route.query.examId, cityName: city }
+                });
+                this.districts = response.data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async getExamPointsForDistrict(district) {
+            try {
+                const response = await api.get('/apply/examCenter', {
+                    params: { examId: this.$route.query.examId, districtName: district }
+                });
+                this.examCenters = response.data.examCenters;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async getSeatsForExamPoint(examCenterId) {
+            try {
+                const response = await api.get('/apply/remainNumber', {
+                    params: { examId: this.$route.query.examId, centerId: examCenterId }
+                });
+                this.location.seats = response.data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        updateLocationName(value) {
+            const selectedExamCenter = this.examCenters.find(examCenter => examCenter.examCenterId === value);
+            if (selectedExamCenter) {
+                this.location.name = selectedExamCenter.examCenterName;
+            }
+        },
     },
     mounted() {
-        // fetch data if necessary
         this.Signup();
     }
 };
@@ -190,6 +241,6 @@ export default {
 }
 
 .exam-info {
-    background-color: #80b3d1;
+    background-color: #d9eec4;
 }
 </style>
