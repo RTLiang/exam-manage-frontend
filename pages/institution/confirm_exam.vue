@@ -86,7 +86,7 @@
         </div>
         <template #footer>
             <div class="dialog-footer">
-                <el-button type="primary" @click="confirmexam">
+                <el-button type="primary" @click="confirmExam">
                     我已阅读并了解
                 </el-button>
             </div>
@@ -117,13 +117,13 @@ export default {
     },
     watch: {
         'location.city'(newCity) {
-            this.districts = this.getDistrictsForCity(newCity);
+            this.getDistrictsForCity(newCity);
         },
         'location.district'(newDistrict) {
-            this.examCenters = this.getExamPointsForDistrict(newDistrict);
+            this.getExamPointsForDistrict(newDistrict);
         },
         'location.id'(newCenterid) {
-            this.location.seats = this.getSeatsForExamPoint(newCenterid);
+            this.getSeatsForExamPoint(newCenterid);
         },
     },
     methods: {
@@ -155,15 +155,24 @@ export default {
         showExamRules() {
             this.examRules = true;
         },
-        confirmexam() {
-            this.$router.push({
-                path: './checkout',
-                query: {
-                    examId: this.$route.query.examId,
+        async confirmExam() {
+            try {
+                await api.post('/eduApply/commit', {
                     userIdList: this.$route.query.userIdList,
-                    centerId: this.location.id
-                }
-            });
+                    examId: this.$route.query.examId,
+                    examCenterId: this.location.id
+                });
+                this.$router.push({
+                    path: './checkout',
+                    query: {
+                        examId: this.$route.query.examId,
+                        userIdList: this.$route.query.userIdList,
+                        examCenterId: this.location.id
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+            }
         },
         async getDistrictsForCity(city) {
             try {
@@ -230,17 +239,21 @@ export default {
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 5px;
-}
-
-.exam-info,
-.exam-location {
-    background-color: #b4e0a3;
-    padding: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    background-color: #fff;
 }
 
 .exam-info {
-    background-color: #d9eec4;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.exam-location {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #fff;
 }
 </style>
