@@ -75,7 +75,7 @@ export default {
       this.extendRegistrationDialogVisible = true;
       this.examToExtend = exam;
     },
-   async confirmExtendRegistration() {
+    async confirmExtendRegistration() {
       const currentTime = new Date();
       const newEndTime = new Date(this.newEndRegisterTime);
       const startExamTime = new Date(this.examToExtend.start_exam);
@@ -93,7 +93,19 @@ export default {
       this.extendRegistrationDialogVisible = false;
 
       // Call the API to update the endApplyTime of the exam
+      await this.manageTime();
+    },
 
+    async manageTime() {
+      try {
+        const response = await api.post('/manage/update', {
+          examid: this.examToExtend.examId,
+          endApplyTime: this.newEndRegisterTime
+        });
+        // handle the response here
+      } catch (error) {
+        // handle the error here
+      }
     },
     async fetchExams() {
       try {
@@ -114,7 +126,8 @@ export default {
     },
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-      return new Date(dateString).toLocaleDateString('zh-CN', options).replace(/\//g, '年').replace('年', '月').replace('月', '日 ');
+      return new Date(dateString)
+        .toLocaleDateString('zh-CN', options);
     }
   },
   created() {
