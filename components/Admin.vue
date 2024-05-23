@@ -11,6 +11,7 @@
             <el-button @click="$router.push('/admin/institution_account')" plain>机构账号管理</el-button>
             <el-button @click="$router.push('/admin/examiner_manage')" plain>监考员管理</el-button>
             <el-button @click="$router.push('/admin/special_need_review')" plain>特殊需求管理</el-button>
+            <el-button @click="$router.push('/admin/illegal_manage')" plain>违规情况管理</el-button>
         </div>
     </div>
 

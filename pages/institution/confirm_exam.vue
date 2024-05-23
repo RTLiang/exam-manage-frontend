@@ -160,7 +160,7 @@ export default {
                 await api.post('/eduApply/commit', {
                     userIdList: this.$route.query.userIdList,
                     examId: this.$route.query.examId,
-                    centerId: this.location.id,
+                    examCenterId: this.location.id,
                     userId:this.$route.query.userId,
                 });
                 this.$router.push({
@@ -168,7 +168,9 @@ export default {
                     query: {
                         examId: this.$route.query.examId,
                         userIdList: this.$route.query.userIdList,
-                        examCenterId: this.location.id
+                        examCenterId: this.location.id,
+                        userId:this.$route.query.userId,
+                        centerId: this.location.id 
                     }
                 });
             } catch (error) {

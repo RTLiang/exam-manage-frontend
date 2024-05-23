@@ -4,13 +4,14 @@
         <el-container>
             <el-header>
                 <h2 v-if="type === 'individual'"> 考生 {{ this.examinee.examineeName }} ，您已成功报名 {{ exam.examName }}</h2>
-                <h2 v-else-if="type === 'edu'">机构 {{ name }} 已成功为 {{ studentNumber }} 人报考 {{ exam.examName }}</h2>
+                <h2 v-else-if="type === 'edu'">机构 {{ this.institution.name }} 已成功为 {{ studentNumber }} 人报考 {{
+                    exam.examName }}</h2>
                 <div class="print_prompt" style="font-size: 24px;">
                     请于 <b style="color: #0066CC;">{{ parseTime(exam.endAppllyTime) }}</b> 到 <b
                         style=" color: #0066CC;">{{ parseTime(exam.startExamTime) }}</b> 打印准考证
                 </div>
                 <h3>
-                    考试时间：{{ parseTime(exam.startExamTime) }} 
+                    考试时间：{{ parseTime(exam.startExamTime) }}
                 </h3>
                 <hr>
             </el-header>
@@ -23,9 +24,7 @@
 
                 <el-button size="large" type="primary" :disabled="!isPrintAvaliable">准考证打印</el-button>
                 <el-button size="large" type="danger" @click="$router.push('/')">安全退出</el-button>
-                <el-button v-if="type === 'individual'" size="large"
-                    @click="tospecial"
-                    plain>特殊考生申请</el-button>
+                <el-button v-if="type === 'individual'" size="large" @click="tospecial" plain>特殊考生申请</el-button>
             </el-main>
         </el-container>
     </div>
@@ -50,7 +49,7 @@ export default {
             type: String,
             required: true
         },
-        userid:{
+        userid: {
             type: String,
             required: true
         }
@@ -67,13 +66,17 @@ export default {
                 examineeName: '',
                 userId: '',
             },
+            institution: {
+                name: '',
+                userId: '',
+            },
             isPrintAvaliable: false,
         };
     },
-   async mounted() {
-        await  this.fetchexaminfo();
+    async mounted() {
+        await this.fetchexaminfo();
+        this.getinsititutionname();
         this.checkPrintAvailability();
-        
     },
     methods: {
         checkPrintAvailability() {
@@ -86,10 +89,15 @@ export default {
             } else {
                 this.isPrintAvaliable = false;
             }
-            console.log("checked"+this.isPrintAvaliable);
+            console.log("checked" + this.isPrintAvaliable);
         },
         async fetchexaminfo() {
-            const res = await api.post(`/apply/pay?examId=${this.examid}&userId=${this.$route.query.userId}`);
+            let res;
+            if (this.type === 'individual') {
+                res = await api.post(`/apply/pay?examId=${this.examid}&userId=${this.userid}`);
+            } else {
+                res = await api.post(`/apply/pay?examId=${this.examid}&userId=18`);
+            }
             console.log(res);
             if (res.data.exam) {
                 this.exam.examName = res.data.exam.examName;
@@ -99,7 +107,6 @@ export default {
                 this.examinee.userId = res.data.examinee.userId;
                 this.examinee.examineeName = res.data.examinee.examineeName;
                 this.checkPrintAvailability();
-
             }
         },
         parseTime(timeString) {
@@ -120,10 +127,20 @@ export default {
                     examId: this.exam.examId,
                 }
             });
+        },
+        async getinsititutionname() {
+            const res = await api.get('/eduApply/examInfo', {
+                params: {
+                    userId: this.userid,
+                }
+            });
+            if (res.data.organizationName) {
+                this.institution.name = res.data.organizationName;
+                console.log(this.institution.name);
+            }
         }
     },
 };
-
 </script>
 
 <style scoped>

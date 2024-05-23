@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { ElMessage } from 'element-plus';
 import api from '../axios';
 
@@ -82,79 +82,82 @@ export default {
       });
       setTimeout(() => {
         console.log('Redirecting to additional procedure page...');
-        window.location.href = `./additional_procedure?examId=${this.exam.examId}&userId=${this.userId}`;
+        if(this.type === 'edu'){
+          window.location.href = `./additional_procedure?examId=${this.exam.examId}&userId=${this.userId}&stuNumber=${this.studentNumbers}`;
+        }else{
+          window.location.href = `./additional_procedure?examId=${this.exam.examId}&userId=${this.userId}`;
+        }
       }, 1000); // wait for 2 seconds before redirecting and reloading
     },
     async fetchexaminfo() {
-      console.log("fetchexaminfo");
-      const examId = this.$route.query.examId;
-      const userId = this.$route.query.userId;
-      const centerId = this.$route.query.centerId;
+        console.log("fetchexaminfo");
+        const examId = this.$route.query.examId;
+        const userId = this.$route.query.userId;
+        const centerId = this.$route.query.centerId;
+        try {
+          const res = await api.post(`/apply/exam?examId=${examId}&userId=${userId}&centerId=${centerId}`);
+          console.log(res);
+          const data = res.data;
+          this.exam.examCenterId = data.examCenterId;
+          this.exam.centerName = data.centerName;
+          this.exam.cityName = data.cityName;
+          this.exam.districtName = data.districtName;
+          this.exam.examId = data.examId;
+          this.exam.examName = data.examName;
+          this.exam.startExamTime = data.startExamTime;
+          this.exam.endExamTime = data.endExamTime;
+          this.exam.examPayment = data.examPayment;
+          this.exam.examcenterlocation = data.centerLocation;
+          this.userId = data.userId;
+          console.log("this.exam");
+          console.log(this.exam);
+        } catch (error) {
+          console.log(error);
+        };
 
-      try {
-        const res = await api.post(`/apply/exam?examId=${examId}&userId=${userId}&centerId=${centerId}`);
-        console.log(res);
-        const data = res.data;
-        this.exam.examCenterId = data.examCenterId;
-        this.exam.centerName = data.centerName;
-        this.exam.cityName = data.cityName;
-        this.exam.districtName = data.districtName;
-        this.exam.examId = data.examId;
-        this.exam.examName = data.examName;
-        this.exam.startExamTime = data.startExamTime;
-        this.exam.endExamTime = data.endExamTime;
-        this.exam.examPayment = data.examPayment;
-        this.exam.examcenterlocation = data.centerLocation;
-        this.userId = data.userId;
-        console.log("this.exam");
-        console.log(this.exam);
-      } catch (error) {
-        console.log(error);
-      };
+        try {
+          const res = await api.get(`/examinee/info?userId=${userId}`);
+          const examinee = res.data.examinee;
+          this.student.name = examinee.name;
+          this.student.idNumber = examinee.IDNumber;
+          this.student.phone = examinee.phone;
+          console.log("============");
+          console.log(res);
+          console.log(this.student);
+        } catch (error) {
+          console.log(error);
+        };
+        console.log('Student Name:', this.student.name);
+        console.log('Exam Name:', this.exam.examName);
+        console.log('Start Time:', this.exam.startExamTime);
+        console.log('End Time:', this.exam.endExamTime);
+        console.log('Location:', this.exam.examcenterlocation);
 
-      try {
-        const res = await api.get(`/examinee/info?userId=${userId}`);
-        const examinee = res.data.examinee;
-        this.student.name = examinee.name;
-        this.student.idNumber = examinee.IDNumber;
-        this.student.phone = examinee.phone;
-        console.log("============");
-        console.log(res);
-        console.log(this.student);
-      } catch (error) {
-        console.log(error);
-      };
-      console.log('Student Name:', this.student.name);
-      console.log('Exam Name:', this.exam.examName);
-      console.log('Start Time:', this.exam.startExamTime);
-      console.log('End Time:', this.exam.endExamTime);
-      console.log('Location:', this.exam.examcenterlocation);
+      },
+      formatTime(startTime, endTime) {
+        const start = new Date(startTime);
+        const end = new Date(endTime);
 
+        const year = start.getFullYear();
+        const month = start.getMonth() + 1; // Months are 0-based in JavaScript
+        const date = start.getDate();
+        const startHour = start.getHours();
+        const startMinute = start.getMinutes();
+        const startSecond = start.getSeconds();
+
+        const endHour = end.getHours();
+        const endMinute = end.getMinutes();
+        const endSecond = end.getSeconds();
+
+        return `${year}年${month}月${date}日${startHour}:${startMinute}:${startSecond}到${endHour}:${endMinute}:${endSecond}`;
+      }
     },
-    formatTime(startTime: string, endTime: string) {
-      const start = new Date(startTime);
-      const end = new Date(endTime);
-
-      const year = start.getFullYear();
-      const month = start.getMonth() + 1; // Months are 0-based in JavaScript
-      const date = start.getDate();
-      const startHour = start.getHours();
-      const startMinute = start.getMinutes();
-      const startSecond = start.getSeconds();
-
-      const endHour = end.getHours();
-      const endMinute = end.getMinutes();
-      const endSecond = end.getSeconds();
-
-      return `${year}年${month}月${date}日${startHour}:${startMinute}:${startSecond}到${endHour}:${endMinute}:${endSecond}`;
+    mounted() {
+      console.log(this.$route.query);
+      this.fetchexaminfo();
+      console.log();
     }
-  },
-  mounted() {
-    console.log(this.$route.query);
-    this.fetchexaminfo();
-    console.log();
-  }
-};
+  };
 </script>
 
 <style scoped>

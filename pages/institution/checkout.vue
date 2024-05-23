@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import api from '../../axios';
 export default {
     data() {
         return {

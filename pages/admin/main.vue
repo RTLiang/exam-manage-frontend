@@ -53,6 +53,10 @@ export default {
         {
           entryname: '特殊需求审核',
           path: '/admin/special_need_review'
+        },
+        {
+          entryname: '违规情况管理',
+          path:'/admin/illegal_manage'
         }
       ],
     }
