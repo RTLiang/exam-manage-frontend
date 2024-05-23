@@ -42,9 +42,9 @@ export default {
             searchQuery: '',
             selectedRows: [],
             subject: {
-                id: "111",
-                name: "科目一",
-                registrationDeadline: '11:59PM Jul 2, 2024',
+                id: "",
+                name:"" ,
+                registrationDeadline: "",
             },
             user: {
                 name: "",

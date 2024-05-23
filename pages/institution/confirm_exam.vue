@@ -160,7 +160,8 @@ export default {
                 await api.post('/eduApply/commit', {
                     userIdList: this.$route.query.userIdList,
                     examId: this.$route.query.examId,
-                    examCenterId: this.location.id
+                    centerId: this.location.id,
+                    userId:this.$route.query.userId,
                 });
                 this.$router.push({
                     path: './checkout',
