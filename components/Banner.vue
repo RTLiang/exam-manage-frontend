@@ -1,7 +1,7 @@
 <template>
     <div class="banner">
         <h2>省考系统</h2>
-        <p>省着点考</p>
+        <!-- <p>省着点考</p> -->
     </div>
 </template>
 

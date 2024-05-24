@@ -1,6 +1,6 @@
 <template>
-    <Banner/>
-    <Admin/>
+    <Banner />
+    <Admin />
     <br>
     <div class="examiner-list-box">
         <br>
@@ -12,11 +12,11 @@
                 <el-table-column fixed prop="exam_center_name" label="考点名" />
                 <el-table-column prop="illegal_time" label="违规时间" />
                 <el-table-column prop="illegal_information" label="违规信息" />
-                
+
             </el-table>
-            <div style="text-align: center; margin-top: 20px;">
-            <el-button type="primary" @click="handleAddExaminer">添加违规信息</el-button>
-        </div>
+            <!-- <div style="text-align: center; margin-top: 20px;">
+                <el-button type="primary" @click="handleAddExaminer">添加违规信息</el-button>
+            </div> -->
         </div>
         <br>
     </div>

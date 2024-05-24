@@ -3,14 +3,14 @@
     <ToolBar />
     <NuxtPage />
     <br>
-    <div class="carousel ">
+    <!-- <div class="carousel ">
         <el-carousel height="150px">
             <el-carousel-item v-for="item in imageData" :key="item.id">
                 <img class="carousel-image" :src="item.url" alt="Carousel Image" style="max-width: 100%; max-height: 100%; height: auto; margin: 0 auto; display: block;"/>
             </el-carousel-item>
         </el-carousel>
-    </div>
-    <br>
+    </div> -->
+    <!-- <br> -->
     <div class="lowerbox">
         <br>
         <div class="exam-procedure-box">
