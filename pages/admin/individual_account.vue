@@ -76,7 +76,7 @@ export default {
                     phone_number: '1536948203',
                     email: '153248@gmail.com',
                     Id_number: '2687485245',
-                    institutionL:'hqyj',
+                    institution:'hqyj',
                     whitelisted: true,
 
                 }
