@@ -12,7 +12,7 @@
                 <el-table-column prop="center_loc" label="考点位置" />
                 <el-table-column prop="center_city" label="考点所属市" />
                 <el-table-column prop="center_dis" label="考点所属区" />
-                <el-table-column prop="center_capacity" label="考点容量" />
+                <!-- <el-table-column prop="center_capacity" label="考点容量" /> -->
                 <!-- <el-table-column fixed="right" label="操作">
                     <template #default>
                         <el-button link type="primary" size="small"
@@ -32,53 +32,33 @@ export default {
             searchQuery: '',
             examCenters: [
                 {
+                    id: 22,
+                    center_name: '成都理工大学',
+                    center_loc: '二仙桥街道',
+                    center_city: '成都',
+                    center_dis: '成华区',
+                },
+                {
                     id: 1,
-                    center_name: 'Beijing Exam Center',
-                    center_loc: 'No. 1, Beijing Road',
-                    center_city: 'Beijing',
-                    center_dis: 'Dongcheng District',
-                    center_capacity: 500
+                    center_name: '电子科技大学',
+                    center_loc: '建设路',
+                    center_city: '成都',
+                    center_dis: '成华区',
                 },
                 {
                     id: 2,
-                    center_name: 'Shanghai Exam Center',
-                    center_loc: 'No. 2, Shanghai Road',
-                    center_city: 'Shanghai',
-                    center_dis: 'Pudong District',
-                    center_capacity: 800
+                    center_name: '锦江区',
+                    center_loc: '锦江区',
+                    center_city: '成华区',
+                    center_dis: '成都',
                 },
                 {
                     id: 3,
-                    center_name: 'Guangzhou Exam Center',
-                    center_loc: 'No. 3, Guangzhou Road',
-                    center_city: 'Guangzhou',
-                    center_dis: 'Tianhe District',
-                    center_capacity: 300
+                    center_name: '武侯区',
+                    center_loc: '武侯区',
+                    center_city: '成都',
+                    center_dis: '成华区',
                 },
-                {
-                    id: 4,
-                    center_name: 'Shenzhen Exam Center',
-                    center_loc: 'No. 4, Shenzhen Road',
-                    center_city: 'Shenzhen',
-                    center_dis: 'Futian District',
-                    center_capacity: 600
-                },
-                {
-                    id: 5,
-                    center_name: 'Chengdu Exam Center',
-                    center_loc: 'No. 5, Chengdu Road',
-                    center_city: 'Chengdu',
-                    center_dis: 'Jinjiang District',
-                    center_capacity: 400
-                },
-                {
-                    id: 6,
-                    center_name: 'Hangzhou Exam Center',
-                    center_loc: 'No. 6, Hangzhou Road',
-                    center_city: 'Hangzhou',
-                    center_dis: 'Xi Hu District',
-                    center_capacity: 700
-                }
             ]
         }
     },

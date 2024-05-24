@@ -26,9 +26,9 @@ export default {
     data() {
         return {
             specialNeeds: [
-                { examNumber: '123456', demandInfo: '需求信息1', resolved: false },
-                { examNumber: '789012', demandInfo: '需求信息2', resolved: true },
-                { examNumber: '345678', demandInfo: '需求信息3', resolved: false },
+                { examNumber: '898876590', demandInfo: '行动不便人士，需要特殊照顾', resolved: false },
+                { examNumber: '714659566', demandInfo: '听力受损人士，需要会手语的志愿者', resolved: true },
+                { examNumber: '766026701', demandInfo: '未成年考生单独考试，需要特殊照顾', resolved: false },
             ]
         };
     },

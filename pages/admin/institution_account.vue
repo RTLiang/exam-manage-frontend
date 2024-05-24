@@ -30,29 +30,10 @@ export default {
             searchQuery: '',
             institutions: [
                 {
-                    id: 1,
-                    name: '北京大学',
+                    id: 19,
+                    name: 'hqyj',
                 },
-                {
-                    id: 2,
-                    name: '清华大学',
-                },
-                {
-                    id: 3,
-                    name: '中国人民大学',
-                },
-                {
-                    id: 4,
-                    name: '北京交通大学',
-                },
-                {
-                    id: 5,
-                    name: '北京航空航天大学',
-                },
-                {
-                    id: 6,
-                    name: '北京理工大学',
-                }
+               
             ]
 
         }
