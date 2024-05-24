@@ -15,12 +15,12 @@
         <el-table-column prop="end_exam" label="考试结束时间" />
         <el-table-column prop="exam_type" label="考试类型" />
         <el-table-column prop="fee" label="考试费用" />
-        <el-table-column fixed="right" label="操作">
+        <!-- <el-table-column fixed="right" label="操作">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="extendRegistration(scope.row)">延长报考时间</el-button>
-            <!-- <el-button link type="primary" size="small" @click="handleClick">查看违规信息</el-button> -->
+            <el-button link type="primary" size="small" @click="handleClick">查看违规信息</el-button> 
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
       </el-table>
     </div>

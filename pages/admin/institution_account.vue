@@ -10,11 +10,11 @@
             <el-table :data="filteredInstitutions" border style="width: 100%">
                 <el-table-column fixed prop="id" label="账号" required />
                 <el-table-column prop="name" label="机构名称" required />
-                <el-table-column label="操作" width="100">
+                <!-- <el-table-column label="操作" width="100">
                     <template v-slot="scope">
                         <el-button @click="handleEdit(scope.row)" type="primary" size="small">修改</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
 
 
             </el-table>

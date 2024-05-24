@@ -31,10 +31,10 @@ export default {
           entryname: '考试管理',
           path: '/admin/exam_manage'
         },
-        {
-          entryname: '新建考试',
-          path: '/admin/exam_submit'
-        },
+        // {
+        //   entryname: '新建考试',
+        //   path: '/admin/exam_submit'
+        // },
         {
           entryname: '考点管理',
           path: '/admin/exam_center_manage',
@@ -46,10 +46,11 @@ export default {
         {
           entryname: '机构账号管理',
           path: '/admin/institution_account',
-        }, {
-          entryname: '监考员管理',
-          path: '/admin/examiner_manage'
-        },
+        }, 
+        // {
+        //   entryname: '监考员管理',
+        //   path: '/admin/examiner_manage'
+        // },
         {
           entryname: '特殊需求审核',
           path: '/admin/special_need_review'

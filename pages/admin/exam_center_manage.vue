@@ -13,12 +13,12 @@
                 <el-table-column prop="center_city" label="考点所属市" />
                 <el-table-column prop="center_dis" label="考点所属区" />
                 <el-table-column prop="center_capacity" label="考点容量" />
-                <el-table-column fixed="right" label="操作">
+                <!-- <el-table-column fixed="right" label="操作">
                     <template #default>
                         <el-button link type="primary" size="small"
                             @click="handleEdit($event, props.row)">编辑</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </div>
         <br>

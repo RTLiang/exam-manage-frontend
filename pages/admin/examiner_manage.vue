@@ -10,12 +10,12 @@
             <el-table :data="filteredExaminers" border style="width: 100%">
                 <el-table-column fixed prop="id_card" label="身份证号" />
                 <el-table-column prop="name" label="姓名" />
-                <el-table-column fixed="right" label="操作">
+                <!-- <el-table-column fixed="right" label="操作">
                     <template #default="props">
                         <el-button link type="primary" size="small"
                             @click="handleEdit(props.row)">修改信息</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div style="text-align: center; margin-top: 20px;">
             <el-button type="primary" @click="handleAddExaminer">添加监考员</el-button>
