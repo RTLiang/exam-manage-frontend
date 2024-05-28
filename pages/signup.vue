@@ -96,6 +96,7 @@ export default {
                     }, 1500);
                 } else {
                     console.error('Sign up failed:', response.data.error);
+                    ElMessage.error('注册失败');
                 }
             } catch (error) {
                 console.error('Error sending request:', error);

@@ -5,7 +5,7 @@
             <div style="font-size: x-large; margin-top: 10px;">
                 {{ user.name }}：请选择报考 <b>{{ subject.name }}</b> 的考生
             </div>
-            <div style="margin-top: 20;">报名截止时间：{{ subject.registrationDeadline }}</div>
+            <div style="margin-top: 20px;">报名截止时间：{{ subject.registrationDeadline }}</div>
         </el-header>
         <el-main>
             <div class="search-bar">
@@ -13,13 +13,12 @@
             </div>
             <div class="table-container">
                 <el-table ref="table" :data="filteredStudentsData" stripe border
-                    @selection-change="handleSelectionChange" @filter-change="handleFilterChange">
+                    @selection-change="handleSelectionChange">
                     <el-table-column type="selection" :selectable="selectableRow" />
                     <el-table-column prop="userId" label="考生号" />
                     <el-table-column prop="name" label="姓名" />
                     <el-table-column prop="phone" label="手机号码" />
-                    <el-table-column prop="applyStatus" label="是否已报考本科目" sortable :formatter="ShiFouType"
-                        :filter-method="filterIsApply" />
+                    <el-table-column prop="applyStatus" label="是否已报考本科目" sortable :formatter="ShiFouType" />
                 </el-table>
             </div>
         </el-main>
@@ -33,6 +32,7 @@
 
 <script>
 import api from '../../axios';
+
 export default {
     data() {
         return {
@@ -43,7 +43,7 @@ export default {
             selectedRows: [],
             subject: {
                 id: "",
-                name:"" ,
+                name: "",
                 registrationDeadline: "",
             },
             user: {
@@ -65,16 +65,10 @@ export default {
     },
     methods: {
         selectableRow(row) {
-            return !row.isApply;
+            return !row.applyStatus;
         },
         handleSelectionChange(selection) {
             this.selectedRows = selection;
-        },
-        handleFilterChange(filters) {
-            console.log(filters);
-        },
-        filterIsApply(value, row) {
-            return row.isApply === value;
         },
         ShiFouType(row, column, cellValue) {
             return cellValue ? "是" : "否";
@@ -100,9 +94,10 @@ export default {
                 }
             })
                 .then(response => {
-                    this.subject.name = response.data.examInfoList.find(subject => subject.examId === this.examId).examName;
+                    const examInfo = response.data.examInfoList.find(subject => subject.examId === this.examId);
+                    this.subject.name = examInfo.examName;
                     this.subject.id = this.examId;
-                    this.subject.registrationDeadline = this.parseTime(response.data.examInfoList.find(subject => subject.examId === this.examId).endApplyTime);
+                    this.subject.registrationDeadline = this.parseTime(examInfo.endApplyTime);
                     this.user.name = response.data.organizationName;
                 })
                 .catch(error => {
@@ -110,12 +105,12 @@ export default {
                 });
         },
         parseTime(timeString) {
-            let dateTime = new Date(timeString);
-            let year = dateTime.getFullYear();
-            let month = dateTime.getMonth() + 1;
-            let day = dateTime.getDate();
-            let hour = dateTime.getHours();
-            let minute = dateTime.getMinutes();
+            const dateTime = new Date(timeString);
+            const year = dateTime.getFullYear();
+            const month = dateTime.getMonth() + 1;
+            const day = dateTime.getDate();
+            const hour = dateTime.getHours();
+            const minute = dateTime.getMinutes();
 
             return `${year}年${month}月${day}日${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
         },
@@ -123,14 +118,14 @@ export default {
             const selectedUserIds = this.selectedRows.map(row => row.userId);
             api.post('/eduApply/exam', {
                 examId: this.examId,
-                userIdList : selectedUserIds  // Include the selected user IDs in the payload
+                userIdList: selectedUserIds
             })
                 .then(response => {
                     this.$router.push({
                         path: '/institution/confirm_exam',
                         query: {
                             examId: this.examId,
-                            userIdList:selectedUserIds
+                            userIdList: selectedUserIds
                         }
                     });
                 })
