@@ -24,8 +24,10 @@
 
                 <el-button size="large" type="primary" :disabled="!isPrintAvaliable">准考证打印</el-button>
                 <el-button size="large" type="danger" @click="$router.push('/')">安全退出</el-button>
-                <el-button v-if="type === 'individual'" size="large" @click="tospecial" plain>特殊考生申请</el-button>
+                <!-- <el-button v-if="type === 'individual'" size="large" @click="tospecial" plain>特殊考生申请</el-button> -->
             </el-main>
+            <br>
+            <div style="text-align: center;">请发送邮件到 <a href="mailto: admin@example.com">admin@example.com</a> 以申请特殊考生</div>
         </el-container>
     </div>
 </template>

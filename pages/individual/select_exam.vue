@@ -95,8 +95,14 @@ export default {
                     this.$router.push('./checkout');
                     break;
                 case 'completed':
-                    this.viewExamInfo(subject);
-                    this.$router.push('./additional_procedure');
+                    // this.viewExamInfo(subject);
+                    this.$router.push({
+                        path: './additional_procedure',
+                        query: {
+                            userId: this.$route.query.userId,
+                            examId: info.examId
+                        }
+                    });
                     break;
                 default:
                     break;

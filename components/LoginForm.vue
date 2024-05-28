@@ -78,6 +78,7 @@ export default {
                 console.log(response);
                 if (response.data.success) {
                     console.log('Login successful!    ' + response.data.userId);
+                    ElMessage.success('登录成功');
                     // Redirect to dashboard or whatever
                     if (this.type === 'individual') {
                         this.$router.push({
@@ -97,8 +98,10 @@ export default {
                     }
                 } else {
                     console.error('Login failed:', response.data.error);
+
                 }
             } catch (error) {
+                ElMessage.error('登录失败，请确认登录渠道和账号密码是否正确');
                 console.error('Error sending request:', error);
             }
         }
