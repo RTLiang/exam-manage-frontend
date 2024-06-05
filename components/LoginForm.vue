@@ -49,6 +49,7 @@
 
 <script>
 import api from '../axios'; // Import the Axios instance
+import CryptoJS from 'crypto-js';
 
 
 export default {
@@ -69,9 +70,10 @@ export default {
     methods: {
         async handleSubmit() {
             try {
+                const hashedPassword = CryptoJS.SHA256(this.form.password).toString();
                 const data = {
                     identifier: this.form.username,
-                    password: this.form.password,
+                    password: hashedPassword,
                     usertype: this.type.trim().toLowerCase()
                 };
                 const response = await api.post('/login', data);

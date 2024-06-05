@@ -48,6 +48,9 @@
 </template>
 <script>
 import api from '../axios'
+import CryptoJS from 'crypto-js';
+
+
 export default {
     data() {
         return {
@@ -75,9 +78,10 @@ export default {
             //TODO 连接数据库登录
 
             try {
+                const hashedPassword = CryptoJS.SHA256(this.form.password).toString();
                 const data = {
                     examineeName: this.form.name,
-                    password: this.form.password,
+                    password: hashedPassword,
                     examineeIDNumber: this.form.idNumber,
                     examineePhone: this.form.phone,
                     examineeEmail: this.form.email
