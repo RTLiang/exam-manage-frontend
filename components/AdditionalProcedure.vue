@@ -22,12 +22,14 @@
             <br>
             <el-main>
 
-                <el-button size="large" type="primary" :disabled="!isPrintAvaliable">准考证打印</el-button>
+                <el-button v-if="type === 'individual'" size="large" type="primary" :disabled="!isPrintAvaliable"
+                    @click="admissionTicket">准考证打印</el-button>
                 <el-button size="large" type="danger" @click="$router.push('/')">安全退出</el-button>
                 <!-- <el-button v-if="type === 'individual'" size="large" @click="tospecial" plain>特殊考生申请</el-button> -->
             </el-main>
             <br>
-            <div style="text-align: center;">请发送邮件到 <a href="mailto: admin@example.com">admin@example.com</a> 以申请特殊考生</div>
+            <div style="text-align: center;">请发送邮件到 <a href="mailto: admin@example.com">admin@example.com</a> 以申请特殊考生
+            </div>
         </el-container>
     </div>
 </template>
@@ -77,7 +79,7 @@ export default {
     },
     async mounted() {
         await this.fetchexaminfo();
-        this.getinsititutionname();
+        if (this.type === 'insititution') this.getinsititutionname();
         this.checkPrintAvailability();
     },
     methods: {
@@ -140,8 +142,28 @@ export default {
                 this.institution.name = res.data.organizationName;
                 console.log(this.institution.name);
             }
-        }
-    },
+        },
+        async admissionTicket() {
+            try {
+                const response = await api.get('/downloadAdmissionTicket', {
+                    params: {
+                        userId: this.userid,  // 替换为实际的userId
+                        examId: this.examid   // 替换为实际的examId
+                    },
+                    responseType: 'blob' // 确保返回的是Blob对象
+                });
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'admission_ticket.pdf');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                console.error('下载失败', error);
+            }
+        },
+    }
 };
 </script>
 

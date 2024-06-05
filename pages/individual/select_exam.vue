@@ -14,9 +14,9 @@
                             moment(examInfo[index].endExamTime).format('YYYY年M月D日HH:mm:ss') }}</p>
                         <h4>报名截止时间:</h4>
                         <p> {{ moment(examInfo[index].endApplyTime).format('YYYY年M月D日HH:mm:ss') }}</p>
-                        <el-button type="primary" @click="handleButtonClick(examInfo[index])">{{
+                        <el-button type="primary" @click="handleButtonClick(examInfo[index])" :disabled="examInfo[index].status === 'outdated'">{{
                             getButtonText(examInfo[index].status)
-                            }}
+                        }}
                         </el-button>
                     </el-card>
                 </el-col>
@@ -47,6 +47,8 @@ export default {
                     return '去缴费';
                 case 'completed':
                     return '查看报考信息';
+                case 'outdated':
+                    return '已过期';
                 default:
                     return '操作';
             }
@@ -92,7 +94,7 @@ export default {
                     break;
                 case 'selected':
                     this.payForSubject(subject);
-                    this.$router.push('./checkout');
+                    this.$router.push('./checkout')
                     break;
                 case 'completed':
                     // this.viewExamInfo(subject);

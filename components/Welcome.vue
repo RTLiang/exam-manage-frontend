@@ -24,7 +24,7 @@ export default {
       else if (this.user.user_type === 'admin') {
         return ('管理员');
       }
-    }
+    },
   }
 }
 </script>

@@ -23,16 +23,12 @@
 </template>
 
 <script>
-
-
+import api from '../../axios';
 export default defineComponent({
     data() {
         return {
             searchQuery: '',
             examiners: [
-                { exam_name: '高数', exam_center_name: '四川成都', illegal_time: '2024-05-23 09:00:00', illegal_information: '小明带手机进入考场' },
-                { exam_name: '英语', exam_center_name: '北京', illegal_time: '2024-06-15 10:30:00', illegal_information: '作弊行为' },
-                // Add more exam data here
             ]
         };
     },
@@ -48,6 +44,14 @@ export default defineComponent({
         }
     },
     methods: {
+        async fetchIllegalExams() {
+            try {
+                const response = await api.get('/manage/illeg');
+                this.examiners = response.data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
         handleEdit(row) {
             // Handle edit logic here
             console.log('Editing exam:', row);
@@ -56,7 +60,10 @@ export default defineComponent({
             console.log('add examiner   ')
             // Your code to add an examiner goes here
         }
-    }
+    },
+    mounted() {
+        this.fetchIllegalExams();
+    },
 });
 </script>
 <style>

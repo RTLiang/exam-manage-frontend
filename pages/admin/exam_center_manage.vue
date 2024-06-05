@@ -8,17 +8,17 @@
         <div class="center-list">
             <el-input v-model="searchQuery" placeholder="搜索" />
             <el-table :data="filteredExams" border style="width: 100%">
-                <el-table-column fixed prop="center_name" label="考点名称" />
-                <el-table-column prop="center_loc" label="考点位置" />
-                <el-table-column prop="center_city" label="考点所属市" />
-                <el-table-column prop="center_dis" label="考点所属区" />
-                <!-- <el-table-column prop="center_capacity" label="考点容量" /> -->
+                <el-table-column fixed prop="examCenterName" label="考点名称" />
+                <el-table-column prop="examCenterLocation" label="考点位置" />
+                <el-table-column prop="cityName" label="考点所属市" />
+                <el-table-column prop="districtsName" label="考点所属区" />
+                <el-table-column prop="examRemainNumber" label="考点容量" />
                 <!-- <el-table-column fixed="right" label="操作">
                     <template #default>
                         <el-button link type="primary" size="small"
                             @click="handleEdit($event, props.row)">编辑</el-button>
                     </template>
-                </el-table-column> -->
+</el-table-column> -->
             </el-table>
         </div>
         <br>
@@ -26,39 +26,12 @@
 </template>
 
 <script>
+import api from '../../axios';
 export default {
     data() {
         return {
             searchQuery: '',
             examCenters: [
-                {
-                    id: 22,
-                    center_name: '成都理工大学',
-                    center_loc: '二仙桥街道',
-                    center_city: '成都',
-                    center_dis: '成华区',
-                },
-                {
-                    id: 1,
-                    center_name: '电子科技大学',
-                    center_loc: '建设路',
-                    center_city: '成都',
-                    center_dis: '成华区',
-                },
-                {
-                    id: 2,
-                    center_name: '锦江区',
-                    center_loc: '锦江区',
-                    center_city: '成华区',
-                    center_dis: '成都',
-                },
-                {
-                    id: 3,
-                    center_name: '武侯区',
-                    center_loc: '武侯区',
-                    center_city: '成都',
-                    center_dis: '成华区',
-                },
             ]
         }
     },
@@ -66,20 +39,32 @@ export default {
         filteredExams() {
             return this.examCenters.filter(center => {
                 return (
-                    center.center_name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                    center.center_loc.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                    center.center_city.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                    center.center_dis.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                    center.center_capacity.toString().includes(this.searchQuery)
+                    center.examCenterName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                    center.examCenterLocation.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                    center.cityName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                    center.districtsName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                    center.examRemainNumber.toString().includes(this.searchQuery)
                 )
             })
         }
     },
     methods: {
+        async fetchExamCenters() {
+            try {
+                const response = await api.get('/manage/examCenter');
+                this.examCenters = response.data;
+            } catch (error) {
+                console.error(error);
+            }
+            console.log(this.examCenters);
+        },
         handleEdit(event, row) {
             console.log(`Editing ${row.center_name}`)
             // add your edit logic here
         }
+    },
+    mounted() {
+        this.fetchExamCenters();
     }
 }
 </script>
