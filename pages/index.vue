@@ -3,13 +3,15 @@
     <ToolBar />
     <NuxtPage />
     <br>
-    <!-- <div class="carousel ">
-        <el-carousel height="150px">
+    <div class="carousel " >
+        <el-carousel height="70px" arrow="never">
             <el-carousel-item v-for="item in imageData" :key="item.id">
-                <img class="carousel-image" :src="item.url" alt="Carousel Image" style="max-width: 100%; max-height: 100%; height: auto; margin: 0 auto; display: block;"/>
+                <div class="carousel-text" style="text-align: center;font-size: larger;">
+                    {{ item.text }}
+                </div>
             </el-carousel-item>
         </el-carousel>
-    </div> -->
+    </div>
     <!-- <br> -->
     <div class="lowerbox">
         <br>
@@ -32,7 +34,16 @@
         <br>
         <br>
         <br>
+        <div class="imgbox" style="text-align: center;">
+            <img src="http://hrss.shandong.gov.cn/resource/rsks/201811/299450e5-10d8-4f6c-a564-67cc59c5c397.jpg">
+            <img src="http://hrss.shandong.gov.cn/resource/rsks/201811/3273c3a8-446a-40ec-9ebd-0d85a8774d4c.gif">
+            <img src="http://hrss.shandong.gov.cn/resource/rsks/201811/01280c11-837f-4386-b193-93bae4adde17.gif">
+            <img src="http://hrss.shandong.gov.cn/resource/rsks/202004/54c21699-d713-4257-b043-a29d4f64126c.jpg">
+            <img src="http://hrss.shandong.gov.cn/resource/rsks/201811/cd062018-16c3-4285-84e0-24803a5fe46d.gif">
+
+        </div>
     </div>
+
 
 </template>
 
@@ -42,10 +53,10 @@ export default {
     data() {
         return {
             imageData: [
-                { id: 1, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad13.jpg' },
-                { id: 2, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad12.jpg' },
-                { id: 3, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad14.jpg' },
-                { id: 4, url: 'https://ielts.neea.cn/project/ielts/v2/image/new-ad4.png' },
+                { id: 1, text: '2024年考试录用公务员公告' },
+                { id: 2, text: '关于调整省属事业单位初级综合类岗位公开招聘笔试科目的公告' },
+                { id: 3, text: '人力资源和社会保障部人事考试中心2024年公开招聘工作公告' },
+                { id: 4, text: '2024年考试录用公务员（含选调生）笔试成绩查询 ' },
             ],
         }
     },
@@ -69,9 +80,11 @@ export default {
 .carousel {
     margin: 0 15%;
 }
-.lowerbox{
-background-color: #ebeff0;
+
+.lowerbox {
+    background-color: #ebeff0;
 }
+
 .exam-procedure-box {
     background-color: white;
     border: 1px solid #ddd;
